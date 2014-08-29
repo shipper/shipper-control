@@ -1,0 +1,20 @@
+{
+  "name": "shipper-control",
+  "version": "0.0.0",
+  "description": "Shipper control surfaces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/joukou/shipper-control.git"
+  },
+  "author": "Isaac Johnston <isaac.johnston@joukou.com> (https://joukou.com/)",
+  "license": "Proprietary",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/joukou/shipper-control/issues"
+  },
+  "homepage": "https://github.com/joukou/shipper-control"
+}

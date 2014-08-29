@@ -1,0 +1,31 @@
+machine:
+  environment:
+    CI_BUILD_NUMBER: "${CIRCLE_BUILD_NUM}"
+    CI_BUILD_URL: "https://circleci.com/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM}"
+    CI_BRANCH: "${CIRCLE_BRANCH}"
+    COVERALLS_REPO_TOKEN: v5eFpSOmxy0X3v2CD1JsksKzgJdOfOQUl
+    COVERALLS_SERVICE_JOB_ID: "${CIRCLE_BUILD_NUM}"
+    COVERALLS_SERVICE_NAME: CircleCI
+    PATH: $HOME/$CIRCLE_PROJECT_REPONAME/.circle:$PATH
+    DOCKER_IMAGE_NAME: quay.io/joukou/shipper-control
+  timezone:
+    Pacific/Auckland
+  node:
+    version: 0.10.31
+  services:
+    - docker
+deployment:
+  staging:
+   branch: develop
+   commands:
+     - docker-login
+     - docker-build
+     - docker-push
+     - trigger-builds
+  production:
+    branch: master
+    commands:
+      - docker-login
+      - docker-build
+      - docker-push
+      - trigger-builds
