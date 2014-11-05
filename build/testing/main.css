@@ -19,3 +19,32 @@
     width: 320px;
   }
 }
+#product {
+  margin: 15px;
+}
+@media (min-width: 960px) {
+  #product {
+    margin: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product {
+    margin: 50px;
+  }
+}
+#product #general .column {
+  padding: 15px;
+}
+@media (min-width: 960px) {
+  #product #general .column {
+    padding: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product #general .column {
+    padding: 50px;
+  }
+}
+#product #general .column md-input-group input {
+  width: 100%;
+}
