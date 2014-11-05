@@ -1,0 +1,24 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
+div(layout='vertical' layout-fill)
+  div(layout='vertical' layout-align='center center' flex)
+    md-content.md-whiteframe-z3(layout layout-padding)
+      md-input-group
+        md-text-float.long(label='Username' ng-model='username')
+        md-text-float.long(label='Password' type='password' ng-model='password')
+        md-text-float.long(
+          label='Repeat Password'
+          type='passwordConfirm'
+          ng-model='password'
+          ng-show='signUp'
+        )
+        div(layout)
+          div(flex layout="vertical" layout-align='center center space-between')
+            div(layout)
+              md-button.md-raised.md-primary(flex ng-if='!signUp' ng-click='signIn()') Sign in
+            | &nbsp;
+            div(layout)
+              md-button.md-raised(flex ng-if='!signUp') Forgot password

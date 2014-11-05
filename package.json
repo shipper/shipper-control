@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/joukou/shipper-control/issues"
   },
-  "homepage": "https://github.com/joukou/shipper-control"
+  "homepage": "https://github.com/joukou/shipper-control",
+  "dependencies": {
+    "angularjs": "0.0.1"
+  }
 }
