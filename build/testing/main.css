@@ -32,19 +32,20 @@
     margin: 50px;
   }
 }
-#product #general .column {
+#product .column {
   padding: 15px;
 }
 @media (min-width: 960px) {
-  #product #general .column {
+  #product .column {
     padding: 30px;
   }
 }
 @media (min-width: 1200px) {
-  #product #general .column {
+  #product .column {
     padding: 50px;
   }
 }
-#product #general .column md-input-group input {
+#product .column md-input-group input {
+  max-width: 500px;
   width: 100%;
 }

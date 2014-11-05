@@ -41,7 +41,7 @@ gulp.task('clone:bower:a', [ 'create:build' ], function(){
         path.join('bower_components', 'hammerjs', 'hammer.min.js'),
         path.join('bower_components', 'angular-animate', 'angular-animate.min.js'),
         path.join('bower_components', 'angular-aria', 'angular-aria.min.js'),
-        path.join('bower_components', 'angular-material', 'angular-material.min.js'),
+        path.join('bower_components', 'angular-material', 'angular-material.js'),
         path.join('bower_components', 'angular-material', 'angular-material.min.css'),
         path.join('bower_components', 'angular-route', 'angular-route.min.js'),
 
