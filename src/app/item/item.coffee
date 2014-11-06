@@ -25,6 +25,7 @@ window.app
     volume: ''
     perVolume: '∞'
     perWeight: '∞'
+    perCapacity: '∞'
     pallet:
       length: '1.2'
       width: '1'
@@ -83,11 +84,30 @@ window.app
       if isNaN(weight) or weight <= 0
         $scope.dimensions.perWeight = '∞'
         return
-      weight = Math.floor(weight * decimal) / decimal
       if weight < 1 / decimal
         $scope.dimensions.perWeight = "< #{1 / decimal}"
         return
+      weight = Math.floor(weight * decimal) / decimal
+
       $scope.dimensions.perWeight = weight.toString()
+    calculatePerCapacity: ->
+      capacity = $scope.dimensions.capacity
+      if not capacity
+        $scope.dimensions.perCapacity = '∞'
+        return
+      capacity = parseFloat(capacity)
+      if isNaN(capacity) or capacity <= 0
+        $scope.dimensions.perCapacity = '∞'
+        return
+      capacity = 1 / capacity
+      if isNaN(capacity) or capacity <= 0
+        $scope.dimensions.perCapacity = '∞'
+        return
+      if capacity < 1 / decimal
+        $scope.dimensions.perCapacity = "< #{1 / capacity}"
+        return
+      capacity = Math.floor(capacity * decimal) / decimal
+      $scope.dimensions.perCapacity = capacity.toString()
     calculatePalletHeight: ->
       height = $scope.dimensions.height
       palletHeight = $scope.dimensions.pallet.height
@@ -210,6 +230,9 @@ window.app
         $scope.dimensions.weight
       , $scope.dimensions.calculatePerWeight)
       $scope.$watch(->
+        $scope.dimensions.capacity
+      , $scope.dimensions.calculatePerCapacity)
+      $scope.$watch(->
         $scope.dimensions.pallet.high
       , $scope.dimensions.calculatePalletItems)
       $scope.$watch(->
@@ -230,4 +253,210 @@ window.app
   }
   $scope.dimensions.setup();
   $scope.general = {}
+  $scope.grouping = {
+    items: '1'
+    width: ''
+    height: ''
+    length: ''
+    capacity: ''
+    volume: ''
+    filled: ''
+    filledCapacity: ''
+    maximum: ''
+    calculateVolume: ->
+      length = parseFloat($scope.grouping.length)
+      width = parseFloat($scope.grouping.width)
+      height = parseFloat($scope.grouping.height)
+      if isNaN(length) or isNaN(width) or isNaN(height)
+        $scope.grouping.volume = ''
+        return
+      if length <= 0 or width <= 0 or height <= 0
+        $scope.grouping.volume = ''
+        return
+      volume = length * width * height
+      if volume < 1 / decimal
+        $scope.grouping.volume = "< #{1 / decimal}"
+        return
+      volume = Math.floor(volume * decimal) / decimal
+      $scope.grouping.volume = volume.toString()
+    calculateFilled: ->
+      length = $scope.dimensions.length
+      width = $scope.dimensions.width
+      height = $scope.dimensions.height
+      items = $scope.grouping.items
+      length = parseFloat(length)
+      width = parseFloat(width)
+      height = parseFloat(height)
+      items = parseFloat(items)
+      if isNaN(length) or isNaN(width) or isNaN(height) or isNaN(items)
+        $scope.grouping.filled = ''
+        return
+      if length <= 0 or width <= 0 or height <= 0 or items <= 0
+        $scope.grouping.filled = ''
+        return
+      filled = width * length * height * items
+      filled = Math.floor(filled * decimal) / decimal
+      $scope.grouping.filled = filled.toString()
+      maximum = $scope.grouping.maximum
+      maximum = parseFloat(maximum)
+      if isNaN(maximum)
+        return
+      if maximum < 1
+        return
+      percent = filled / maximum * 100
+      percent = Math.floor(percent * decimal) / decimal
+      if percent <= 0
+        return
+      $scope.grouping.filled = $scope.grouping.filled + " (#{percent}%)"
+    calculateMaximum: ->
+      max = $scope.grouping.calculateMaximumWithFigures(
+        $scope.grouping.length,
+        $scope.grouping.width,
+        $scope.grouping.height,
+        $scope.dimensions.length,
+        $scope.dimensions.width,
+        $scope.dimensions.height
+      )
+      if isNaN(max) or max <= 0
+        $scope.grouping.maximum = ''
+        if $scope.grouping.capacity and $scope.dimensions.capacity
+          max = $scope.grouping.capacity
+          item = $scope.dimensions.capacity
+          max = parseFloat(max)
+          item = parseFloat(item)
+          if isNaN(max) or isNaN(item)
+            return
+          if max <= 0 or item <= 0
+            return
+          max = max / item
+          max = Math.floor(max)
+          $scope.grouping.maximum = max.toString()
+        return
+      max = Math.floor(max)
+      $scope.grouping.maximum = max.toString()
+    calculateMaximumWithFigures: (l, w, h, il, iw, ih) ->
+      l = parseFloat(l)
+      w = parseFloat(w)
+      h = parseFloat(h)
+      il = parseFloat(il)
+      iw = parseFloat(iw)
+      ih = parseFloat(ih)
+      if isNaN(l) or isNaN(w) or isNaN(h)
+        return NaN
+      if isNaN(il) or isNaN(iw) or isNaN(ih)
+        return NaN
+      if l <= 0 or w <= 0 or h <= 0
+        return NaN
+      if il <= 0 or iw <= 0 or ih <= 0
+        return NaN
+      max = $scope.grouping.calculateAllCombinations(
+        [
+          l,
+          w,
+          h
+        ],
+        [
+          il,
+          iw,
+          ih
+        ]
+      )
+    calculateAllCombinations: (a, b) ->
+      aAll = []
+      bAll = []
+      i = 0
+      while i < a.length
+        res = []
+        k = 0
+        while k < a.length
+          z = i + k
+          if z >= a.length
+            z -= a.length
+          res.push(a[z])
+          k += 1
+        i += 1
+        aAll.push(res)
+      i = 0
+      while i < b.length
+        res = []
+        k = 0
+        while k < b.length
+          z = i + k
+          if z >= b.length
+            z -= b.length
+          res.push(b[z])
+          k += 1
+        i += 1
+        bAll.push(res)
+      max = 0
+      for va in aAll
+        for vb in bAll
+          v = []
+          i = 0
+          while i < va.length and i < vb.length
+            v.push(va[i] / vb[i])
+            i++
+          val = null
+          for k in v
+            if val is null
+              val = k
+              continue
+            val *= k
+          if val > max
+            max = val
+      if max <= 0
+        return 0
+      return max
+    setup: ->
+      $scope.$watch(->
+        $scope.grouping.length
+      , $scope.grouping.calculateVolume)
+      $scope.$watch(->
+        $scope.grouping.width
+      , $scope.grouping.calculateVolume)
+      $scope.$watch(->
+        $scope.grouping.height
+      , $scope.grouping.calculateVolume)
+      $scope.$watch(->
+        $scope.grouping.length
+      , $scope.grouping.calculateMaximum)
+      $scope.$watch(->
+        $scope.grouping.width
+      , $scope.grouping.calculateMaximum)
+      $scope.$watch(->
+        $scope.grouping.height
+      , $scope.grouping.calculateMaximum)
+      $scope.$watch(->
+        $scope.grouping.capacity
+      , $scope.grouping.calculateMaximum)
+      $scope.$watch(->
+        $scope.grouping.items
+      , $scope.grouping.calculateFilled)
+      $scope.$watch(->
+        $scope.grouping.volume
+      , $scope.grouping.calculateFilled)
+      $scope.$watch(->
+        $scope.grouping.maximum
+      , $scope.grouping.calculateFilled)
+    selected: ->
+      $scope.grouping.calculateVolume()
+      $scope.grouping.calculateMaximum()
+      $scope.grouping.calculateFilled()
+  }
+
+  $scope.grouping.setup()
+
+  $scope.variations = {
+    sku: ''
+    description: ''
+    variations: []
+    add: ->
+      $scope.variations.variations.push({
+        sku: $scope.variations.sku
+        description: $scope.variations.description
+      })
+      $scope.variations.sku = ''
+      $scope.variations.description = ''
+  }
+
 ])

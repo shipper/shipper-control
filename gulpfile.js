@@ -111,7 +111,7 @@ var develop = [
     'build:less',
     'build:jade',
     "build:concat:js",
-    'build:uglify',
+    //'build:uglify',
     //'build:uglify:bower'
 ]
 

@@ -28,22 +28,33 @@ div(layout='vertical' id="dimensions" )
         label="Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
         ng-model='dimensions.weight'
       )
+      //
+        md-text-float(
+          label="Capacity ({{dimensions.imperial?'Gallons':'Litres'}})"
+          ng-model='dimensions.capacity'
+        )
     div.column(flex layout='vertical')
       md-text-float(
         disabled
-        label="Volume ({{dimensions.imperial?'Cubic Feet':'Cubic meters'}})"
+        label="Volume ({{dimensions.imperial?'Cubic Feet':'Cubic Meters'}})"
         ng-model='dimensions.volume'
       )
       md-text-float(
         disabled
-        label="Items per ({{dimensions.imperial?'Cubic Feet':'Cubic meters'}})"
+        label="Items per {{dimensions.imperial?'Cubic Feet':'Cubic Meters'}}"
         ng-model='dimensions.perVolume'
       )
       md-text-float(
         disabled
-        label="Items per ({{dimensions.imperial?'Pound':'Kilogram'}})"
+        label="Items per {{dimensions.imperial?'Pound':'Kilogram'}}"
         ng-model='dimensions.perWeight'
       )
+      //
+        md-text-float(
+          disabled
+          label="Items per {{dimensions.imperial?'Gallon':'Litre'}}"
+          ng-model='dimensions.perCapacity'
+        )
   h3#pallet-header Pallet
   div(layout="horizontal")
     div.column(flex layout='vertical')

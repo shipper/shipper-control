@@ -9,9 +9,7 @@ section.md-whiteframe-z2(id='product')
       div(ng-include="'app/item/tabs/general.html'")
     md-tab(label='Dimensions & Weight')
       div(ng-include="'app/item/tabs/dimensions.html'")
-    md-tab(label='Additional Items')
-      div(layout='vertical' layout-fill)
-        | Test
-    md-tab(label='Identification')
-      div(layout='vertical' layout-fill)
-        | Test
+    md-tab(label='Grouping' on-select='grouping.selected()')
+      div(ng-include="'app/item/tabs/grouping.html'")
+    md-tab(label='Variations')
+      div(ng-include="'app/item/tabs/variations.html'")

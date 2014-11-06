@@ -1,0 +1,52 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 6/11/14
+div(layout="horizontal" id="general")
+  div.column(flex layout="vertical")
+    md-text-float(
+      label="Items per {{grouping.type || 'Grouping'}}"
+      ng-model='grouping.items'
+    )
+    md-text-float(
+      label="{{grouping.type || 'Grouping'}} Length ({{dimensions.imperial?'Inches':'Centimeters'}})"
+      ng-model='grouping.length'
+    )
+    md-text-float(
+      label="{{grouping.type || 'Grouping'}} Width ({{dimensions.imperial?'Inches':'Centimeters'}})"
+      ng-model='grouping.width'
+    )
+    md-text-float(
+      label="{{grouping.type || 'Grouping'}} Height ({{dimensions.imperial?'Inches':'Centimeters'}})"
+      ng-model='grouping.height'
+    )
+    //
+      md-text-float(
+        label="{{grouping.type || 'Grouping'}} Capacity ({{dimensions.imperial?'Gallons':'Liters'}})"
+        ng-model='grouping.capacity'
+      )
+  div.column(flex layout="vertical")
+    md-text-float(
+      disabled
+      label="Volume ({{dimensions.imperial?'Cubic Inches':'Cubic Centimeters'}})"
+      ng-model='grouping.volume'
+    )
+    md-text-float(
+      disabled
+      label="Maximum Items per {{grouping.type || 'Grouping'}}"
+      ng-model='grouping.maximum'
+    )
+    md-text-float(
+      disabled
+      label="Filled Volume ({{dimensions.imperial?'Cubic Inches':'Cubic Centimeters'}})"
+      ng-model='grouping.filled'
+    )
+    //
+      md-text-float(
+        disabled
+        label="Filled Capacity ({{dimensions.imperial?'Gallons':'Litres'}})"
+        ng-model='grouping.filledCapacity'
+      )
+  div.column(flex layout="vertical")
+    md-button.md-raised.md-button Grouping type
