@@ -19,5 +19,23 @@
   "homepage": "https://github.com/joukou/shipper-control",
   "dependencies": {
     "angularjs": "0.0.1"
+  },
+  "devDependencies": {
+    "gulp": "3.8.x",
+    "coffee-script": "~1.6.3",
+    "gulp-coffee": "~2.2.0",
+    "gulp-less": "~1.3.6",
+    "path": "~0.4.9",
+    "lazypipe": "~0.2.2",
+    "gulp-jade": "~0.9.0",
+    "mkdirp": "~0.5.0",
+    "async": "~0.9.0",
+    "rimraf": "~2.2.8",
+    "gulp-rimraf": "~0.1.1",
+    "gulp-concat": "~2.4.1",
+    "gulp-bower-files": "~0.2.7",
+    "main-bower-files": "~2.1.0",
+    "gulp-uglify": "~1.0.1",
+    "tiny-lr": "~0.1.4"
   }
 }

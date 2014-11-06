@@ -1,0 +1,42 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 6/11/14
+div(layout="horizontal" id="general")
+  div.column(flex layout="vertical")
+    md-text-float(label='SKU' ng-model='general.sku')
+    md-text-float(label='Universal Product Code' nd-model='general.upc')
+    md-text-float(label='Description' ng-model='general.description')
+    md-text-float(label='Description Extended' ng-model='general.descriptionExtended')
+  div.column(flex layout="vertical")
+    md-text-float(label='Lead Time (days)' ng-model='general.leadTime' md-int)
+    md-text-float(label='Safety Stock' ng-model='general.safetyStock' md-int)
+    md-text-float(label='Minimum Stock' ng-model='general.minimumStock' md-int)
+    md-text-float(label='Maximum Stock' ng-model='general.maximumStock' md-int)
+  div.column(flex layout="vertical")
+    md-text-float(label='Purchase Price ($)' ng-model='general.purchase')
+    md-text-float(label='Sale Price ($)' ng-model='general.sale')
+  div.column(flex layout="vertical")
+    md-button.md-button(
+      ng-click='general.selectFacility()'
+      ng-class='general.facility ? "" : "md-raised"'
+    )
+      span(ng-if='!general.facility') Facility
+      span(ng-if='general.facility') {{general.facility.header}}
+    br
+    md-button.md-button(
+      ng-click='general.selectCustomer()'
+      ng-class='general.customer ? "" : "md-raised"'
+    )
+      span(ng-if='!general.customer') Customer
+      span(ng-if='general.customer') {{general.customer.header}}
+    br
+    md-button.md-button(
+      ng-click='general.selectCountry()'
+      ng-class='general.customer ? "" : "md-raised"'
+    )
+      span(ng-if='!general.country') Country of Manufacture
+      span(ng-if='general.country') {{general.country.header}}
+    br
+    md-button.md-raised.md-button(ng-click='general.selectCategory()') Category

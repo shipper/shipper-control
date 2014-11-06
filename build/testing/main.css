@@ -1,0 +1,177 @@
+/*
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
+*/
+@media (min-width: 600px) {
+  md-input-group.long > input {
+    width: 150px;
+  }
+}
+@media (min-width: 960px) {
+  md-input-group.long > input {
+    width: 200px;
+  }
+}
+@media (min-width: 1200px) {
+  md-input-group.long > input {
+    width: 320px;
+  }
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+  border-left: 1px solid #ccc;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+#product {
+  margin: 15px;
+}
+@media (min-width: 960px) {
+  #product {
+    margin: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product {
+    margin: 50px;
+  }
+}
+#product .column {
+  padding: 15px;
+}
+@media (min-width: 960px) {
+  #product .column {
+    padding: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product .column {
+    padding: 50px;
+  }
+}
+#product .column md-input-group input {
+  max-width: 500px;
+  width: 100%;
+}
+#product #dimensions #item-header {
+  padding: 15px;
+  padding-bottom: 0 !important;
+}
+@media (min-width: 960px) {
+  #product #dimensions #item-header {
+    padding: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product #dimensions #item-header {
+    padding: 50px;
+  }
+}
+#product #dimensions #pallet-header {
+  padding: 15px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+@media (min-width: 960px) {
+  #product #dimensions #pallet-header {
+    padding: 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #product #dimensions #pallet-header {
+    padding: 50px;
+  }
+}
+@media (min-width: 600px) {
+  #selectDialog {
+    min-width: 300px;
+  }
+}
+@media (min-width: 960px) {
+  #selectDialog {
+    min-width: 500px;
+  }
+}
+#selectDialog h3#header {
+  padding: 15px;
+}
+#selectDialog #filter {
+  padding: 15px;
+  margin-bottom: 3em;
+}
+#selectDialog #filter input {
+  width: 100%;
+}
+#selectDialog #content {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+@media (max-height: 250px) {
+  #selectDialog #content {
+    max-height: 125px;
+  }
+}
+@media (max-height: 300px) {
+  #selectDialog #content {
+    max-height: 150px;
+  }
+}
+@media (max-height: 400px) {
+  #selectDialog #content {
+    max-height: 200px;
+  }
+}
+@media (max-height: 500px) {
+  #selectDialog #content {
+    max-height: 250px;
+  }
+}
+@media (max-height: 600px) {
+  #selectDialog #content {
+    max-height: 300px;
+  }
+}
+@media (max-height: 700px) {
+  #selectDialog #content {
+    max-height: 350px;
+  }
+}
+@media (min-height: 701px) {
+  #selectDialog #content {
+    max-height: 600px;
+  }
+}
+#selectDialog #done {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+#selectDialog #done md-icon {
+  width: 24px;
+  height: 24px;
+}
+md-radio-group,
+md-radio-group:focus {
+  border-color: transparent !important;
+}
+md-tab,
+md-tab:focus {
+  border-color: transparent !important;
+}
+md-progress-linear:first-child {
+  margin-top: -5px;
+}
+md-input-group.md-warn,
+md-input-group.md-warn input,
+md-input-group.md-warn label {
+  color: #e84e40 !important;
+  border-color: #e84e40 !important;
+}

@@ -1,0 +1,5 @@
+<!--Copyright (C) Fabian Cook - All Rights Reserved
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Fabian Cook <fabian.cook@shipper.co.nz>, 5/11/14--><!--md-progress-linear(mode="indeterminate" ng-if='loading')
+div(style='height:5px;display:block' ng-if='!loading') &nbsp;--><section id="product" class="md-whiteframe-z2"><md-tabs selected="0"><md-tab label="General"><div ng-include="'app/item/tabs/general.html'"></div></md-tab><md-tab label="Dimensions &amp; Weight"><div ng-include="'app/item/tabs/dimensions.html'"></div></md-tab><md-tab label="Grouping" on-select="grouping.selected()"><div ng-include="'app/item/tabs/grouping.html'"></div></md-tab><md-tab label="Variations"><div ng-include="'app/item/tabs/variations.html'"></div></md-tab></md-tabs></section>

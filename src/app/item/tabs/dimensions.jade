@@ -1,0 +1,111 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 6/11/14
+div(layout='vertical' id="dimensions" )
+  h3#item-header Item
+  div(layout="horizontal")
+    div.column(flex layout="vertical")
+      //
+        md-switch(ng-model="dimensions.imperial" aria-label="Unit measure")
+        | {{dimensions.imperial?'Imperial':'Metric'}}
+      md-text-float(
+        label="Length ({{dimensions.imperial?'Inches':'Centimeters'}})"
+        ng-model='dimensions.length'
+        md-float
+      )
+      md-text-float(
+        label="Width ({{dimensions.imperial?'Inches':'Centimeters'}})"
+        ng-model='dimensions.width'
+        md-float
+      )
+      md-text-float(
+        label="Height ({{dimensions.imperial?'Inches':'Centimeters'}})"
+        ng-model='dimensions.height'
+        md-float
+      )
+    div.column(flex layout='vertical')
+      md-text-float(
+        label="Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
+        ng-model='dimensions.weight'
+        md-float
+      )
+      //
+        md-text-float(
+          label="Capacity ({{dimensions.imperial?'Gallons':'Litres'}})"
+          ng-model='dimensions.capacity'
+        )
+    div.column(flex layout='vertical')
+      md-text-float(
+        disabled
+        label="Volume ({{dimensions.imperial?'Cubic Feet':'Cubic Meters'}})"
+        ng-model='dimensions.volume'
+      )
+      md-text-float(
+        disabled
+        label="Items per {{dimensions.imperial?'Cubic Feet':'Cubic Meters'}}"
+        ng-model='dimensions.perVolume'
+      )
+      md-text-float(
+        disabled
+        label="Items per {{dimensions.imperial?'Pound':'Kilogram'}}"
+        ng-model='dimensions.perWeight'
+      )
+      //
+        md-text-float(
+          disabled
+          label="Items per {{dimensions.imperial?'Gallon':'Litre'}}"
+          ng-model='dimensions.perCapacity'
+        )
+  h3#pallet-header Pallet
+  div(layout="horizontal")
+    div.column(flex layout='vertical')
+      md-text-float(
+        label="Items per Tier"
+        ng-model='dimensions.pallet.tier'
+        md-int
+      )
+      md-text-float(
+        label="Tiers per Pallet"
+        ng-model='dimensions.pallet.high'
+        md-int
+      )
+      md-text-float(
+        disabled
+        label="Items per Pallet"
+        ng-model='dimensions.pallet.itemsPer'
+      )
+    div.column(flex layout='vertical')
+      md-text-float(
+        label="Length ({{dimensions.imperial?'Feet':'Meters'}})"
+        ng-model='dimensions.pallet.length'
+        md-float
+      )
+      md-text-float(
+        label="Width ({{dimensions.imperial?'Feet':'Meters'}})"
+        ng-model='dimensions.pallet.width'
+        md-float
+      )
+      md-text-float(
+        label="Height ({{dimensions.imperial?'Feet':'Meters'}})"
+        ng-model='dimensions.pallet.height'
+        md-float
+      )
+      md-text-float(
+        disabled
+        label="Total Height ({{dimensions.imperial?'Feet':'Meters'}})"
+        ng-model='dimensions.pallet.actualHeight'
+      )
+    div.column(flex layout='vertical')
+      md-text-float(
+        label="Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
+        ng-model='dimensions.pallet.weight'
+        md-float
+      )
+      md-text-float(
+        disabled
+        label="Total Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
+        ng-model='dimensions.pallet.actualWeight'
+      )

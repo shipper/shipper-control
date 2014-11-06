@@ -1,0 +1,29 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 6/11/14
+md-dialog(id='selectDialog' in-view-container)
+  div(layout='vertical')
+    h3#header {{header}}
+    md-text-float(
+      id='filter'
+      label='Filter'
+      ng-if='!hideFilter'
+      ng-model='filter.value'
+    )
+    md-radio-group(ng-model='selectedItem')
+      md-content(layout='vertical' scroll-y id='content')
+        md-list
+          md-item(ng-repeat='item in items | filter: filter.value' aria-label='{{item.header}}')
+            md-item-content
+              .md-tile-left
+                md-radio-button(ng-value='item' aria-label='{{item.header}}')
+              .md-tile-content
+                h3 {{item.header}}
+                h4 {{item.subheader}}
+                p {{item.id}}
+            div(ng-if='!$last')
+              md-divider
+    md-button.md-fab.md-primary(id='done' ng-click='okay()')
+      md-icon(icon="images/icons/ic_done_24px.svg")
