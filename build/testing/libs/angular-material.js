@@ -2,10 +2,10 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.5.1
+ * v0.5.0
  */
 (function() {
-angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.decorators","material.components.backdrop","material.animations","material.components.bottomSheet","material.components.card","material.components.button","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.whiteframe","material.services.aria","material.services.attrBind","material.services.compiler","material.services.interimElement","material.services.media","material.services.registry","material.services.theming"]);})();
+angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.decorators","material.animations","material.components.backdrop","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.whiteframe","material.services.aria","material.services.attrBind","material.services.compiler","material.services.interimElement","material.services.media","material.services.registry","material.services.theming"]);})();
 
 (function() {
   /**
@@ -559,38 +559,6 @@ angular.module('material.decorators', [])
 (function() {
 /*
  * @ngdoc module
- * @name material.components.backdrop
- * @description Backdrop
- */
-
-/**
- * @ngdoc directive
- * @name mdBackdrop
- * @module material.components.backdrop
- *
- * @restrict E
- *
- * @description
- * `<md-backdrop>` is a backdrop element used by other coponents, such as dialog and bottom sheet.
- * Apply class `opaque` to make the backdrop use the theme backdrop color.
- *
- */
-angular.module('material.components.backdrop', [
-  'material.services.theming'
-])
-.directive('mdBackdrop', [
-  '$mdTheming',
-  BackdropDirective
-]);
-
-function BackdropDirective($mdTheming) {
-  return $mdTheming;
-}
-})();
-
-(function() {
-/*
- * @ngdoc module
  * @name material.components.animate
  * @description
  *
@@ -923,6 +891,38 @@ function attrNoDirective() {
 })();
 
 (function() {
+/*
+ * @ngdoc module
+ * @name material.components.backdrop
+ * @description Backdrop
+ */
+
+/**
+ * @ngdoc directive
+ * @name mdBackdrop
+ * @module material.components.backdrop
+ *
+ * @restrict E
+ *
+ * @description
+ * `<md-backdrop>` is a backdrop element used by other coponents, such as dialog and bottom sheet.
+ * Apply class `opaque` to make the backdrop use the theme backdrop color.
+ *
+ */
+angular.module('material.components.backdrop', [
+  'material.services.theming'
+])
+.directive('mdBackdrop', [
+  '$mdTheming',
+  BackdropDirective
+]);
+
+function BackdropDirective($mdTheming) {
+  return $mdTheming;
+}
+})();
+
+(function() {
 /**
  * @ngdoc module
  * @name material.components.bottomSheet
@@ -1190,56 +1190,6 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, 
 (function() {
 /**
  * @ngdoc module
- * @name material.components.card
- *
- * @description
- * Card components.
- */
-angular.module('material.components.card', [
-])
-  .directive('mdCard', [
-    mdCardDirective 
-  ]);
-
-
-
-/**
- * @ngdoc directive
- * @name mdCard
- * @module material.components.card
- *
- * @restrict E
- *
- * @description
- * The `<md-card>` directive is a container element used within `<md-content>` containers.
- *
- * Cards have constant width and variable heights; where the maximum height is limited to what can
- * fit within a single view on a platform, but it can temporarily expand as needed
- *
- * @usage
- * <hljs lang="html">
- * <md-card>
- *  <img src="/img/washedout.png" class="md-card-image">
- *  <h2>Paracosm</h2>
- *  <p>
- *    The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
- *  </p>
- * </md-card>
- * </hljs>
- *
- */
-function mdCardDirective() {
-  return {
-    restrict: 'E',
-    link: function($scope, $element, $attr) {
-    }
-  };
-}
-})();
-
-(function() {
-/**
- * @ngdoc module
  * @name material.components.button
  * @description
  *
@@ -1347,6 +1297,56 @@ function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $md
     }
   };
 
+}
+})();
+
+(function() {
+/**
+ * @ngdoc module
+ * @name material.components.card
+ *
+ * @description
+ * Card components.
+ */
+angular.module('material.components.card', [
+])
+  .directive('mdCard', [
+    mdCardDirective 
+  ]);
+
+
+
+/**
+ * @ngdoc directive
+ * @name mdCard
+ * @module material.components.card
+ *
+ * @restrict E
+ *
+ * @description
+ * The `<md-card>` directive is a container element used within `<md-content>` containers.
+ *
+ * Cards have constant width and variable heights; where the maximum height is limited to what can
+ * fit within a single view on a platform, but it can temporarily expand as needed
+ *
+ * @usage
+ * <hljs lang="html">
+ * <md-card>
+ *  <img src="/img/washedout.png" class="md-card-image">
+ *  <h2>Paracosm</h2>
+ *  <p>
+ *    The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+ *  </p>
+ * </md-card>
+ * </hljs>
+ *
+ */
+function mdCardDirective() {
+  return {
+    restrict: 'E',
+    link: function($scope, $element, $attr) {
+    }
+  };
 }
 })();
 
@@ -1625,28 +1625,20 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   $scope.openDialog = function($event) {
  *     $mdDialog.show({
  *       targetEvent: $event,
- *       template:
+ *       controller: 'DialogController',
+ *       template: 
  *         '<md-dialog>' +
- *         '  <md-content>Hello {{ userName }}!</md-content>' +
+ *         '  <md-content>Hello!</md-content>' +
  *         '  <div class="md-actions">' +
  *         '    <md-button ng-click="closeDialog()">' +
  *         '      Close' +
  *         '    </md-button>' +
  *         '  </div>' +
- *         '</md-dialog>',
- *       controller: 'DialogController',
- *       onComplete: afterShowAnimation,
- *       locals: { name: 'Bobby' }
+ *         '</md-dialog>'
  *     });
- *
- *     // When the 'enter' animation finishes...
- *     function afterShowAnimation(scope, element, options)
- *     {
- *        // post-show code here: DOM element focus, etc.
- *     };
+ *   };
  * });
- * app.controller('DialogController', function($scope, $mdDialog, name) {
- *   $scope.userName = name;
+ * app.controller('DialogController', function($scope, $mdDialog) {
  *   $scope.closeDialog = function() {
  *     $mdDialog.hide();
  *   };
@@ -1686,8 +1678,6 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
  *     to the root element of the application.
- *   - `onComplete` `{function=}`: Callback function used to announce when the show() action is
- *     finished.
  *
  * @returns {promise} A promise that can be resolved with `$mdDialog.hide()` or
  * rejected with `mdDialog.cancel()`.
@@ -3941,8 +3931,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
     scope : {
       fid : '@?',
       label : '@?',
-      value : '=ngModel',
-      change: '&ngChange'
+      value : '=ngModel'
     },
     compile : function(element, attr) {
 
@@ -3963,6 +3952,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
 
           // transpose optional `class` settings
           element.attr('class', attrs.class );
+
         },
         post: $mdTheming
       };
@@ -4061,12 +4051,6 @@ function mdInputDirective($mdUtil) {
       element.on('input', function() {
         inputGroupCtrl.setHasValue( isNotEmpty() );
       });
-
-      if (scope.change){
-        element.on('keydown keyup', function() {
-          scope.$eval(scope.change)
-        });
-      }
 
       // When the input focuses, add the focused class to the group
       element.on('focus', function(e) {
@@ -5097,11 +5081,6 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
             if (options.themable) $mdTheming(element);
             var ret = options.onShow(options.scope, element, options);
             return $q.when(ret)
-              .then(function(){
-                  // Issue onComplete callback when the `show()` finishes
-                  var notify = options.onComplete || angular.noop;
-                  notify.apply(null, [options.scope, element, options]);
-              })
               .then(startHideTimeout);
 
             function startHideTimeout() {
