@@ -182,7 +182,7 @@
           }
           $scope.dimensions.calculatePerVolume(length, width, height);
           actualCubic = length * width * height;
-          actualCubic = ($scope.dimensions.imperial ? actualCubic / (12 * 12 * 12) : actualCubic / (100 * 100 * 100));
+          actualCubic = ($scope.dimensions.imperial ? actualCubic / 12 : actualCubic / 100);
           if (cubic < 1 / decimal) {
             $scope.dimensions.volume = "< " + (1 / decimal);
             return;
@@ -441,6 +441,7 @@
         filled: '',
         filledCapacity: '',
         maximum: '',
+        weight: '',
         calculateVolume: function() {
           var height, length, volume, width;
           length = parseFloat($scope.grouping.length);
@@ -463,7 +464,8 @@
           return $scope.grouping.volume = volume.toString();
         },
         calculateFilled: function() {
-          var filled, height, items, length, maximum, percent, width;
+          var filled, height, items, length, percent, volume, width;
+          $scope.grouping.calculateVolume();
           length = $scope.dimensions.length;
           width = $scope.dimensions.width;
           height = $scope.dimensions.height;
@@ -483,15 +485,15 @@
           filled = width * length * height * items;
           filled = Math.floor(filled * decimal) / decimal;
           $scope.grouping.filled = filled.toString();
-          maximum = $scope.grouping.maximum;
-          maximum = parseFloat(maximum);
-          if (isNaN(maximum)) {
+          volume = $scope.grouping.volume;
+          volume = parseFloat(volume);
+          if (isNaN(volume)) {
             return;
           }
-          if (maximum < 1) {
+          if (volume < 1) {
             return;
           }
-          percent = filled / maximum * 100;
+          percent = (filled / volume) * 100;
           percent = Math.floor(percent * decimal) / decimal;
           if (percent <= 0) {
             return;
@@ -609,6 +611,24 @@
           }
           return max;
         },
+        calculateWeight: function() {
+          var items, totalWeight, weight;
+          weight = $scope.dimensions.weight;
+          items = $scope.grouping.items;
+          weight = parseFloat(weight);
+          items = parseFloat(items);
+          if (isNaN(weight) || isNaN(items)) {
+            $scope.grouping.weight = '';
+            return;
+          }
+          if (weight <= 0 || items <= 0) {
+            $scope.grouping.weight = '';
+            return;
+          }
+          totalWeight = weight * items;
+          totalWeight = Math.floor(totalWeight * decimal) / decimal;
+          return $scope.grouping.weight = totalWeight.toString();
+        },
         setup: function() {
           $scope.$watch(function() {
             return $scope.grouping.length;
@@ -637,14 +657,18 @@
           $scope.$watch(function() {
             return $scope.grouping.volume;
           }, $scope.grouping.calculateFilled);
-          return $scope.$watch(function() {
+          $scope.$watch(function() {
             return $scope.grouping.maximum;
           }, $scope.grouping.calculateFilled);
+          return $scope.$watch(function() {
+            return $scope.grouping.items;
+          }, $scope.grouping.calculateWeight);
         },
         selected: function() {
           $scope.grouping.calculateVolume();
           $scope.grouping.calculateMaximum();
-          return $scope.grouping.calculateFilled();
+          $scope.grouping.calculateFilled();
+          return $scope.grouping.calculateWeight();
         }
       };
       $scope.grouping.setup();

@@ -46,6 +46,11 @@ div(layout="horizontal" id="general")
       label="Filled Volume ({{dimensions.imperial?'Cubic Inches':'Cubic Centimeters'}})"
       ng-model='grouping.filled'
     )
+    md-text-float(
+      disabled
+      label="Filled Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
+      ng-model='grouping.weight'
+    )
     //
       md-text-float(
         disabled
