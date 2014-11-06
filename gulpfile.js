@@ -44,12 +44,17 @@ gulp.task('clone:bower:a', [ 'create:build' ], function(){
         path.join('bower_components', 'angular-material', 'angular-material.js'),
         path.join('bower_components', 'angular-material', 'angular-material.min.css'),
         path.join('bower_components', 'angular-route', 'angular-route.min.js'),
+        path.join('bower_components', 'lodash', 'dist', 'lodash.underscore.min.js'),
+        path.join('bower_components', 'jQuery', 'dist', 'jquery.min.js'),
+        path.join('bower_components', 'ngInfiniteScroll', 'build', 'ng-infinite-scroll.min.js'),
+        path.join('bower_components', 'angular-inview', 'angular-inview.js'),
 
         path.join('bower_components', 'angular', 'angular.min.js.map'),
         path.join('bower_components', 'hammerjs', 'hammer.min.map'),
         path.join('bower_components', 'angular-animate', 'angular-animate.min.js.map'),
         path.join('bower_components', 'angular-aria', 'angular-aria.min.js.map'),
-        path.join('bower_components', 'angular-route', 'angular-route.min.js.map')
+        path.join('bower_components', 'angular-route', 'angular-route.min.js.map'),
+        path.join('bower_components', 'jQuery', 'dist', 'jquery.min.map')
     ]).pipe(gulp.dest(
         path.join(paths.dest, 'libs')
     ))
@@ -59,6 +64,16 @@ gulp.task('clone:bower:b', [ 'create:build' ], function(){
         path.join('bower_components', 'angular-material', 'themes', '*.css')
     ).pipe(gulp.dest(
         path.join(paths.dest, 'libs', 'themes')
+    ))
+});
+gulp.task('clone:bower:c', [ 'create:build' ], function(){
+    material = path.join('bower_components', 'material-design-icons');
+    return gulp.src(
+        [
+            path.join(material, 'action', 'svg', 'ic_done*.svg')
+        ]
+    ).pipe(gulp.dest(
+        path.join(paths.dest, 'images', 'icons')
     ))
 });
 
@@ -111,9 +126,10 @@ var develop = [
     'build:less',
     'build:jade',
     "build:concat:js",
+    "clone:bower:c",
     //'build:uglify',
     //'build:uglify:bower'
-]
+];
 
 gulp.task('develop', develop, function(){
     lrServer.listen( 35729, function(err){

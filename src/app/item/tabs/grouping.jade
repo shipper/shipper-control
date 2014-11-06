@@ -8,18 +8,22 @@ div(layout="horizontal" id="general")
     md-text-float(
       label="Items per {{grouping.type || 'Grouping'}}"
       ng-model='grouping.items'
+      md-float
     )
     md-text-float(
       label="{{grouping.type || 'Grouping'}} Length ({{dimensions.imperial?'Inches':'Centimeters'}})"
       ng-model='grouping.length'
+      md-float
     )
     md-text-float(
       label="{{grouping.type || 'Grouping'}} Width ({{dimensions.imperial?'Inches':'Centimeters'}})"
       ng-model='grouping.width'
+      md-float
     )
     md-text-float(
       label="{{grouping.type || 'Grouping'}} Height ({{dimensions.imperial?'Inches':'Centimeters'}})"
       ng-model='grouping.height'
+      md-float
     )
     //
       md-text-float(

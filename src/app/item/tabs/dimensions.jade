@@ -14,19 +14,23 @@ div(layout='vertical' id="dimensions" )
       md-text-float(
         label="Length ({{dimensions.imperial?'Inches':'Centimeters'}})"
         ng-model='dimensions.length'
+        md-float
       )
       md-text-float(
         label="Width ({{dimensions.imperial?'Inches':'Centimeters'}})"
         ng-model='dimensions.width'
+        md-float
       )
       md-text-float(
         label="Height ({{dimensions.imperial?'Inches':'Centimeters'}})"
         ng-model='dimensions.height'
+        md-float
       )
     div.column(flex layout='vertical')
       md-text-float(
         label="Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
         ng-model='dimensions.weight'
+        md-float
       )
       //
         md-text-float(
@@ -61,10 +65,12 @@ div(layout='vertical' id="dimensions" )
       md-text-float(
         label="Items per Tier"
         ng-model='dimensions.pallet.tier'
+        md-int
       )
       md-text-float(
         label="Tiers per Pallet"
         ng-model='dimensions.pallet.high'
+        md-int
       )
       md-text-float(
         disabled
@@ -75,14 +81,17 @@ div(layout='vertical' id="dimensions" )
       md-text-float(
         label="Length ({{dimensions.imperial?'Feet':'Meters'}})"
         ng-model='dimensions.pallet.length'
+        md-float
       )
       md-text-float(
         label="Width ({{dimensions.imperial?'Feet':'Meters'}})"
         ng-model='dimensions.pallet.width'
+        md-float
       )
       md-text-float(
         label="Height ({{dimensions.imperial?'Feet':'Meters'}})"
         ng-model='dimensions.pallet.height'
+        md-float
       )
       md-text-float(
         disabled
@@ -93,6 +102,7 @@ div(layout='vertical' id="dimensions" )
       md-text-float(
         label="Weight ({{dimensions.imperial?'Pounds':'Kilograms'}})"
         ng-model='dimensions.pallet.weight'
+        md-float
       )
       md-text-float(
         disabled

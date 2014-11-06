@@ -14,8 +14,155 @@ window.app
       templateUrl: 'app/item/item.html'
     )
   ])
-.controller( 'ItemCtrl', ['$scope', '$location', ($scope, $location) ->
+.controller( 'ItemCtrl', ['$scope', 'showSelect', ($scope, showSelect) ->
   decimal = 10000
+  $scope.number = (val) ->
+    if not val
+      return 'md-warn'
+    val = parseFloat(val)
+    if isNaN(val)
+      return 'md-warn'
+  $scope.loading = no
+  $scope.general = {
+    facilities: [
+      {
+        id: null
+        header: 'Disassociate'
+        subheader: 'Disassociate with a facility'
+      },
+      {
+        id: 1
+        header: 'Napier'
+        subheader: 'Napier, New Zealand'
+      },
+      {
+        id: 2
+        header: 'Hastings'
+        subheader: 'Hastings, New Zealand'
+      },
+      {
+        id: 3
+        header: 'Auckland'
+        subheader: 'Auckland, New Zealand'
+      }
+    ],
+    customers: {
+      1: [
+        {
+          id: 1,
+          header: 'Fabian'
+          facility: 1
+        },
+        {
+          id: 2,
+          header: 'Joel'
+          facility: 1
+        }
+      ],
+      2: [
+        {
+          id: 2,
+          header: 'Joel'
+        },
+        {
+          id: 3,
+          header: 'Mark'
+        }
+      ],
+      3: [
+        {
+          id: 4,
+          header: 'David'
+        }
+      ]
+    }
+    facility: null
+    customer: null
+    country: null
+    selectFacility: ($event) ->
+      $scope.loading = yes
+      showSelect(
+        'Select a Facility',
+        $scope.general.facilities,
+        $event,
+        $scope.general.facility,
+        no,
+        ->
+          $scope.loading = no
+      ).then((facility)->
+        if not facility or not facility.id
+          $scope.general.facility = null
+          return
+        $scope.general.facility = facility
+
+        if not $scope.general.customer
+          return
+
+        customerId = $scope.general.customer.id
+        if not _.any(
+            $scope.general.customers[$scope.general.facility.id],
+            id: customerId
+          )
+          $scope.general.customer = null
+      )
+    selectCustomer: ($event) ->
+      $scope.loading = yes
+      customers = []
+      customerIds = []
+      if $scope.general.facility
+        customers = $scope.general.customers[$scope.general.facility.id]
+      else
+        for key of $scope.general.customers
+          val = $scope.general.customers[key]
+          for customer in val
+            if _.contains(customerIds, customer.id)
+              continue
+            customers.push(customer)
+            customerIds.push(customer.id)
+      showSelect(
+        'Select a Customer',
+        customers,
+        $event,
+        $scope.general.customer,
+        no,
+        ->
+          $scope.loading = no
+      ).then((customer)->
+        if not customer or not customer.id
+          $scope.general.customer = null
+          return
+        $scope.general.customer = customer
+      )
+
+    selectCountry: ($event) ->
+      #$scope.loading = yes
+      countries = getCountryList()
+      if not $scope.general.country
+        $scope.general.country = countries[147]
+      showSelect(
+        'Select a Country',
+        countries,
+        $event,
+        $scope.general.country,
+        no,
+        ->
+          #$scope.loading = no
+      ).then((country)->
+        if not country or not country.id
+          $scope.general.country = null
+          return
+        $scope.general.country = country
+      )
+    selectCategory: ->
+
+    setup: ->
+      if this.facilities.length is 1
+        this.facility = this.facilities[0]
+  }
+
+  $scope.general.setup()
+
+
   $scope.dimensions = {
     imperial: false
     length: ''
@@ -252,7 +399,6 @@ window.app
       , $scope.dimensions.calculatePalletWeight)
   }
   $scope.dimensions.setup();
-  $scope.general = {}
   $scope.grouping = {
     items: '1'
     width: ''

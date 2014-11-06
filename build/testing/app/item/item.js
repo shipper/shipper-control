@@ -10,9 +10,144 @@
       });
     }
   ]).controller('ItemCtrl', [
-    '$scope', '$location', function($scope, $location) {
+    '$scope', 'showSelect', function($scope, showSelect) {
       var decimal;
       decimal = 10000;
+      $scope.number = function(val) {
+        if (!val) {
+          return 'md-warn';
+        }
+        val = parseFloat(val);
+        if (isNaN(val)) {
+          return 'md-warn';
+        }
+      };
+      $scope.loading = false;
+      $scope.general = {
+        facilities: [
+          {
+            id: null,
+            header: 'Disassociate',
+            subheader: 'Disassociate with a facility'
+          }, {
+            id: 1,
+            header: 'Napier',
+            subheader: 'Napier, New Zealand'
+          }, {
+            id: 2,
+            header: 'Hastings',
+            subheader: 'Hastings, New Zealand'
+          }, {
+            id: 3,
+            header: 'Auckland',
+            subheader: 'Auckland, New Zealand'
+          }
+        ],
+        customers: {
+          1: [
+            {
+              id: 1,
+              header: 'Fabian',
+              facility: 1
+            }, {
+              id: 2,
+              header: 'Joel',
+              facility: 1
+            }
+          ],
+          2: [
+            {
+              id: 2,
+              header: 'Joel'
+            }, {
+              id: 3,
+              header: 'Mark'
+            }
+          ],
+          3: [
+            {
+              id: 4,
+              header: 'David'
+            }
+          ]
+        },
+        facility: null,
+        customer: null,
+        country: null,
+        selectFacility: function($event) {
+          $scope.loading = true;
+          return showSelect('Select a Facility', $scope.general.facilities, $event, $scope.general.facility, false, function() {
+            return $scope.loading = false;
+          }).then(function(facility) {
+            var customerId;
+            if (!facility || !facility.id) {
+              $scope.general.facility = null;
+              return;
+            }
+            $scope.general.facility = facility;
+            if (!$scope.general.customer) {
+              return;
+            }
+            customerId = $scope.general.customer.id;
+            if (!_.any($scope.general.customers[$scope.general.facility.id], {
+              id: customerId
+            })) {
+              return $scope.general.customer = null;
+            }
+          });
+        },
+        selectCustomer: function($event) {
+          var customer, customerIds, customers, key, val, _i, _len;
+          $scope.loading = true;
+          customers = [];
+          customerIds = [];
+          if ($scope.general.facility) {
+            customers = $scope.general.customers[$scope.general.facility.id];
+          } else {
+            for (key in $scope.general.customers) {
+              val = $scope.general.customers[key];
+              for (_i = 0, _len = val.length; _i < _len; _i++) {
+                customer = val[_i];
+                if (_.contains(customerIds, customer.id)) {
+                  continue;
+                }
+                customers.push(customer);
+                customerIds.push(customer.id);
+              }
+            }
+          }
+          return showSelect('Select a Customer', customers, $event, $scope.general.customer, false, function() {
+            return $scope.loading = false;
+          }).then(function(customer) {
+            if (!customer || !customer.id) {
+              $scope.general.customer = null;
+              return;
+            }
+            return $scope.general.customer = customer;
+          });
+        },
+        selectCountry: function($event) {
+          var countries;
+          countries = getCountryList();
+          if (!$scope.general.country) {
+            $scope.general.country = countries[147];
+          }
+          return showSelect('Select a Country', countries, $event, $scope.general.country, false, function() {}).then(function(country) {
+            if (!country || !country.id) {
+              $scope.general.country = null;
+              return;
+            }
+            return $scope.general.country = country;
+          });
+        },
+        selectCategory: function() {},
+        setup: function() {
+          if (this.facilities.length === 1) {
+            return this.facility = this.facilities[0];
+          }
+        }
+      };
+      $scope.general.setup();
       $scope.dimensions = {
         imperial: false,
         length: '',
@@ -296,7 +431,6 @@
         }
       };
       $scope.dimensions.setup();
-      $scope.general = {};
       $scope.grouping = {
         items: '1',
         width: '',
