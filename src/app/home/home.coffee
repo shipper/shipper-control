@@ -9,7 +9,11 @@ window.app
       controller: 'HomeCtrl'
       templateUrl: 'app/home/home.html'
     )
+    .otherwise({
+      redirectTo: 'home'
+    })
   ])
-.controller( 'HomeCtrl', ['$scope', ($scope) ->
-
+.controller( 'HomeCtrl', ['$scope', '$location', ($scope, $location) ->
+  $scope.items = ->
+    $location.path('items')
 ])

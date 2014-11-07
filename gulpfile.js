@@ -77,7 +77,9 @@ gulp.task('clone:bower:c', [ 'create:build' ], function(){
             path.join(material, 'action', 'svg', 'ic_trending*'),
             path.join(material, 'action', 'svg', 'ic_account*'),
             path.join(material, 'action', 'svg', 'ic_extension*'),
-            path.join(material, 'communication', 'svg', 'ic_forum*')
+            path.join(material, 'communication', 'svg', 'ic_forum*'),
+            path.join(material, 'content', 'svg', 'ic_add*'),
+            path.join(material, 'navigation', 'svg', 'ic_more_vert*')
         ]
     ).pipe(gulp.dest(
         path.join(paths.dest, 'images', 'icons')

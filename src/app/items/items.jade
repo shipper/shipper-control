@@ -1,0 +1,36 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 8/11/14
+div(id="items")
+  md-toolbar
+    .md-toolbar-tools
+      div(layout="horizontal" layout-align="center center")
+        div.search(layout="horizontal" layout-align="start center")
+          md-icon(icon="images/icons/ic_search")
+          md-text-float
+
+  md-content.md-whiteframe-z3(id='items-content' layout="vertical" scroll-y)
+    md-side-menu(items='sideMenu')
+    h3 Manage Stock
+    md-list
+      md-item
+        md-item-content
+          .md-tile-left
+            md-checkbox(ng-click='selectAll()' ng-model='selectedAll')
+          .md-tile-content
+            div(layout="horizontal")
+              strong(flex) SKU
+              strong(flex) Description
+              strong(flex) Variations
+      md-item(ng-repeat='item in items')
+        md-item-content
+          .md-tile-left
+            md-checkbox(ng-model='item.selected' ng-click='select(item)')
+          .md-tile-content
+            div(layout="horizontal")
+              span(flex) {{item.sku}}
+              span(flex) {{item.description}}
+              span(flex) {{item.variations.length}} Variation{{item.variations.length !== 1 ? 's' : ''}}
+        md-divider(ng-if='!$last')

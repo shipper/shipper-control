@@ -156,6 +156,25 @@ md-input-group {
     padding:15px;
   }
 }
+#items{
+  .search{
+    background-color:rgba(255, 255, 255, 0.15);
+    margin: 0 auto;
+    input{
+      width: 500px;
+      margin: 0 20px;
+    }
+  }
+  #items-content{
+    .margin-reactive();
+    .padding-reactive();
+    #add-wrapper {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+  }
+}
 
 .md-fab{
   &.large{
@@ -226,4 +245,88 @@ md-input-group {
 }
 .ulgi{
   .limit-max(1199px, inline-block);
+}
+
+.ng-invisible{
+  visibility: hidden;
+}
+
+.md-side-menu{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  md-button{
+    margin:7px 15px !important;
+    &:last-child{
+      margin-bottom:15px !important;
+    }
+    &.children:not(.ng-invisible){
+      opacity: 1;
+      visibility: visible !important;
+    }
+    &.children:nth-last-child(10){
+      transition-delay: 500ms;
+    }
+    &.children:nth-last-child(9){
+      transition-delay: 440ms;
+    }
+    &.children:nth-last-child(8){
+      transition-delay: 380ms;
+    }
+    &.children:nth-last-child(7){
+      transition-delay: 320ms;
+    }
+    &.children:nth-last-child(6){
+      transition-delay: 260ms;
+    }
+    &.children:nth-last-child(5){
+      transition-delay: 200ms;
+    }
+    &.children:nth-last-child(4){
+      transition-delay: 140ms;
+    }
+    &.children:nth-last-child(3){
+      transition-delay: 80ms;
+    }
+    &.children:nth-last-child(2){
+      transition-delay: 20ms;
+    }
+    &.children{
+      transition-delay: 0ms;
+      opacity: 0;
+      visibility: visible !important;
+      -webkit-transform: scale(.8) rotate(360deg);
+      transform: scale(.8) rotate(360deg);
+      -webkit-transition: all 120ms cubic-bezier(.25,.25,0,1);
+      transition: all 120ms cubic-bezier(.25,.25,0,1);
+    }
+    [icon]{
+      width:24px;
+      height:24px;
+      position:absolute;
+      top:16px;
+      left:16px;
+      margin:auto;
+    }
+  }
+  .tooltip-wrapper{
+    display: inline-block;
+    text-align: right;
+    margin-top: 4px;
+    .tooltip{
+      background: rgba(70,70,70,.9);
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      color: #ececec;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 1em;
+      max-width: 200px;
+      overflow: hidden;
+      padding: 6px 8px;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      max-width: none;
+    }
+  }
 }

@@ -1,0 +1,46 @@
+//
+  Copyright (C) Fabian Cook - All Rights Reserved
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Fabian Cook <fabian.cook@shipper.co.nz>, 8/11/14
+div.md-side-menu(
+  ng-mouseenter='open=true'
+  ng-mouseleave='open=false'
+  layout='vertical'
+  ng-if='internalItems && internalItems.length'
+)
+  div.multi(ng-if='internalItems.length !== 1')
+    .md-side-menu-group(ng-repeat='item in internalItems' layout='horizontal' layout-align='end' flex)
+      div(layout='vertical' layout-align='center' layout-padding)
+        label.tooltip-wrapper(layout='vertical' flex)
+          .tooltip(ng-show='item.hover') {{item.tooltip}}
+      md-button.md-fab.children(
+        ng-visible='open'
+        ng-mouseenter='item.hover=true'
+        ng-mouseleave='item.hover=false'
+        ng-click='internalItemClick(item, $index)'
+        ng-class="item.class"
+      )
+        md-icon.standard(ng-visible='open' icon='{{item.icon}}')
+    .md-side-menu-group(layout='horizontal' layout-align='end' flex)
+      div(layout='vertical' layout-align='center' layout-padding)
+        label.tooltip-wrapper(layout='vertical' flex)
+          .tooltip(ng-show='menuHover') Menu
+      md-button.md-fab.md-primary(
+        ng-click='menuClick()'
+        ng-mouseenter='menuHover=true'
+        ng-mouseleave='menuHover=false'
+      )
+        md-icon.main(icon='images/icons/ic_more_vert_24px.svg')
+  div.singe(ng-if='internalItems.length === 1')
+    .md-side-menu-group(layout='horizontal' layout-align='end' flex)
+      div(layout='vertical' layout-align='center' layout-padding)
+        label.tooltip-wrapper(layout='vertical' flex)
+          .tooltip(ng-show='internalItems[0].hover') {{internalItems[0].tooltip}}
+      md-button.md-fab.md-primary(
+        ng-click='internalItemClick(internalItems[0], 0)'
+        ng-mouseenter='internalItems[0].hover=true'
+        ng-mouseleave='internalItems[0].hover=false'
+        ng-class='internalItems[0].class'
+      )
+        md-icon.main(icon='{{internalItems[0].icon}}')

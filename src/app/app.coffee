@@ -8,5 +8,18 @@ window.app = angular.module('ngShipper', [
   'angular-inview'
 ])
 .controller('AppCtrl', [
-  ($scope) ->
+    '$scope',
+    ($scope) ->
+
+      $scope.$on('$routeChangeStart', ->
+        $scope.hideNav = no
+      );
+
+      $scope.$on('hide-nav', ->
+        $scope.hideNav = yes
+      )
+      $scope.$on('show-nav', ->
+        $scope.hideNav = no
+      )
+
 ])

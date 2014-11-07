@@ -21,10 +21,10 @@ html(lang='en' ng-app='ngShipper' ng-controller='AppCtrl' ng-strict-di)
     link(href='libs/themes/light-blue-dark-theme.css' rel="stylesheet" type='text/css')
     link(href='libs/themes/red-theme.css' rel="stylesheet" type='text/css')
   body(layout="vertical" layout-fill)
-    header
+    header.md-whiteframe-z1(ng-hide='hideNav')
       div(ng-include="'app/header/header.html'")
     div(flex layout='vertical')
-      div(ng-view flex scroll-y md-theme='blue')
+      div(ng-view flex scroll-y)
     footer
       div(ng-include="'app/footer/footer.html'")
     script(src = 'libs/jquery.min.js')
