@@ -194,7 +194,7 @@ window.app
       $scope.dimensions.calculatePerVolume(length, width, height)
       actualCubic = length * width * height
       actualCubic = (
-        if $scope.dimensions.imperial then actualCubic / (12 * 12 * 12) else actualCubic / (100 * 100 * 100)
+        if $scope.dimensions.imperial then actualCubic / 12 else actualCubic / 100
       )
       if cubic < 1 / decimal
         $scope.dimensions.volume = "< #{1 / decimal}"
@@ -409,6 +409,7 @@ window.app
     filled: ''
     filledCapacity: ''
     maximum: ''
+    weight: ''
     calculateVolume: ->
       length = parseFloat($scope.grouping.length)
       width = parseFloat($scope.grouping.width)
@@ -426,6 +427,7 @@ window.app
       volume = Math.floor(volume * decimal) / decimal
       $scope.grouping.volume = volume.toString()
     calculateFilled: ->
+      $scope.grouping.calculateVolume()
       length = $scope.dimensions.length
       width = $scope.dimensions.width
       height = $scope.dimensions.height
@@ -443,13 +445,13 @@ window.app
       filled = width * length * height * items
       filled = Math.floor(filled * decimal) / decimal
       $scope.grouping.filled = filled.toString()
-      maximum = $scope.grouping.maximum
-      maximum = parseFloat(maximum)
-      if isNaN(maximum)
+      volume = $scope.grouping.volume
+      volume = parseFloat(volume)
+      if isNaN(volume)
         return
-      if maximum < 1
+      if volume < 1
         return
-      percent = filled / maximum * 100
+      percent = (filled / volume) * 100
       percent = Math.floor(percent * decimal) / decimal
       if percent <= 0
         return
@@ -553,6 +555,20 @@ window.app
       if max <= 0
         return 0
       return max
+    calculateWeight: ->
+      weight = $scope.dimensions.weight
+      items = $scope.grouping.items
+      weight = parseFloat(weight)
+      items = parseFloat(items)
+      if isNaN(weight) or isNaN(items)
+        $scope.grouping.weight = ''
+        return
+      if weight <= 0 or items <= 0
+        $scope.grouping.weight = ''
+        return
+      totalWeight = weight * items
+      totalWeight = Math.floor(totalWeight * decimal) / decimal
+      $scope.grouping.weight = totalWeight.toString()
     setup: ->
       $scope.$watch(->
         $scope.grouping.length
@@ -584,10 +600,14 @@ window.app
       $scope.$watch(->
         $scope.grouping.maximum
       , $scope.grouping.calculateFilled)
+      $scope.$watch(->
+        $scope.grouping.items
+      , $scope.grouping.calculateWeight)
     selected: ->
       $scope.grouping.calculateVolume()
       $scope.grouping.calculateMaximum()
       $scope.grouping.calculateFilled()
+      $scope.grouping.calculateWeight()
   }
 
   $scope.grouping.setup()
