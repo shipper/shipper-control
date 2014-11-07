@@ -6,7 +6,7 @@
 //
   md-progress-linear(mode="indeterminate" ng-if='loading')
   div(style='height:5px;display:block' ng-if='!loading') &nbsp;
-section.md-whiteframe-z2(id='product')
+md-content.md-whiteframe-z3(id='product')
   md-tabs(selected='0')
     md-tab(label='General')
       div(ng-include="'app/item/tabs/general.html'")

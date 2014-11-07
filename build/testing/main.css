@@ -4,6 +4,10 @@
   Proprietary and confidential
   Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
 */
+body,
+html {
+  background-color: #dcdcdc !important;
+}
 @media (min-width: 600px) {
   md-input-group.long > input {
     width: 150px;
@@ -174,4 +178,138 @@ md-input-group.md-warn input,
 md-input-group.md-warn label {
   color: #e84e40 !important;
   border-color: #e84e40 !important;
+}
+#home {
+  margin: 15px;
+}
+@media (min-width: 960px) {
+  #home {
+    margin: 30px 25%;
+  }
+}
+@media (min-width: 1200px) {
+  #home {
+    margin: 50px 20%;
+  }
+}
+#home h3 {
+  padding: 15px;
+}
+.md-fab.large {
+  width: 112px;
+  height: 112px;
+}
+@media (min-width: 600px) {
+  .md-fab.large-sm {
+    width: 112px;
+    height: 112px;
+  }
+}
+@media (min-width: 960px) {
+  .md-fab.large-md {
+    width: 112px;
+    height: 112px;
+  }
+}
+@media (min-width: 1200px) {
+  .md-fab.large-lg {
+    width: 112px;
+    height: 112px;
+  }
+}
+.sm {
+  display: none;
+}
+@media (min-width: 600px) {
+  .sm {
+    display: block;
+  }
+}
+.md {
+  display: none;
+}
+@media (min-width: 960px) {
+  .md {
+    display: block;
+  }
+}
+.lg {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .lg {
+    display: block;
+  }
+}
+.usm {
+  display: none;
+}
+@media (max-width: 599px) {
+  .usm {
+    display: block;
+  }
+}
+.umd {
+  display: none;
+}
+@media (max-width: 959px) {
+  .umd {
+    display: block;
+  }
+}
+.ulg {
+  display: none;
+}
+@media (max-width: 1199px) {
+  .ulg {
+    display: block;
+  }
+}
+.smi {
+  display: none;
+}
+@media (min-width: 600px) {
+  .smi {
+    display: inline-block;
+  }
+}
+.mdi {
+  display: none;
+}
+@media (min-width: 960px) {
+  .mdi {
+    display: inline-block;
+  }
+}
+.lgi {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .lgi {
+    display: inline-block;
+  }
+}
+.usmi {
+  display: none;
+}
+@media (max-width: 599px) {
+  .usmi {
+    display: inline-block;
+  }
+}
+.umdi {
+  display: none;
+}
+@media (max-width: 959px) {
+  .umdi {
+    display: inline-block;
+  }
+}
+.ulgi {
+  display: none;
+}
+@media (max-width: 1199px) {
+  .ulgi {
+    display: inline-block;
+  }
 }

@@ -4,6 +4,10 @@
   Proprietary and confidential
   Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
 */
+body, html{
+  background-color: #dcdcdc !important;
+}
+
 @media (min-width: 600px) {
   md-input-group.long > input {
     width: 150px
@@ -140,4 +144,86 @@ md-input-group {
     border-color: #e84e40 !important;
   }
 }
+#home{
+  margin: 15px;
+  @media (min-width: 960px) {
+    margin: 30px 100/4%;
+  }
+  @media (min-width: 1200px) {
+    margin: 50px 100/5%;
+  }
+  h3{
+    padding:15px;
+  }
+}
 
+.md-fab{
+  &.large{
+    width: 56*2px;
+    height: 56*2px;
+  }
+  @media(min-width: 600px){
+    &.large-sm{
+      .large()
+    }
+  }
+  @media(min-width: 960px){
+    &.large-md{
+      .large()
+    }
+  }
+  @media(min-width: 1200px){
+    &.large-lg{
+      .large()
+    }
+  }
+}
+
+.limit-min(@width, @display: block){
+  display:none;
+  @media(min-width: @width) {
+    display:@display;
+  }
+}
+.limit-max(@width, @display: block){
+  display:none;
+  @media(max-width: @width) {
+    display:@display;
+  }
+}
+.sm{
+  .limit-min(600px);
+}
+.md{
+  .limit-min(960px);
+}
+.lg{
+  .limit-min(1200px);
+}
+.usm{
+  .limit-max(599px);
+}
+.umd{
+  .limit-max(959px);
+}
+.ulg{
+  .limit-max(1199px);
+}
+.smi{
+   .limit-min(600px, inline-block);
+}
+.mdi{
+  .limit-min(960px, inline-block);
+}
+.lgi{
+  .limit-min(1200px, inline-block);
+}
+.usmi{
+  .limit-max(599px, inline-block);
+}
+.umdi{
+  .limit-max(959px, inline-block);
+}
+.ulgi{
+  .limit-max(1199px, inline-block);
+}
