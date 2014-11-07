@@ -182,7 +182,7 @@
           }
           $scope.dimensions.calculatePerVolume(length, width, height);
           actualCubic = length * width * height;
-          actualCubic = ($scope.dimensions.imperial ? actualCubic / 12 : actualCubic / 100);
+          actualCubic = ($scope.dimensions.imperial ? actualCubic / (12 * 12 * 12) : actualCubic * 0.000001);
           if (cubic < 1 / decimal) {
             $scope.dimensions.volume = "< " + (1 / decimal);
             return;

@@ -194,7 +194,7 @@ window.app
       $scope.dimensions.calculatePerVolume(length, width, height)
       actualCubic = length * width * height
       actualCubic = (
-        if $scope.dimensions.imperial then actualCubic / 12 else actualCubic / 100
+        if $scope.dimensions.imperial then actualCubic / (12*12*12) else actualCubic * 0.000001
       )
       if cubic < 1 / decimal
         $scope.dimensions.volume = "< #{1 / decimal}"

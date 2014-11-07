@@ -70,7 +70,14 @@ gulp.task('clone:bower:c', [ 'create:build' ], function(){
     material = path.join('bower_components', 'material-design-icons');
     return gulp.src(
         [
-            path.join(material, 'action', 'svg', 'ic_done*.svg')
+            path.join(material, 'action', 'svg', 'ic_done*'),
+            path.join(material, 'maps', 'svg', 'ic_local_shipping*'),
+            path.join(material, 'maps', 'svg', 'ic_store_mall_directory*'),
+            path.join(material, 'action', 'svg', 'ic_settings*'),
+            path.join(material, 'action', 'svg', 'ic_trending*'),
+            path.join(material, 'action', 'svg', 'ic_account*'),
+            path.join(material, 'action', 'svg', 'ic_extension*'),
+            path.join(material, 'communication', 'svg', 'ic_forum*')
         ]
     ).pipe(gulp.dest(
         path.join(paths.dest, 'images', 'icons')
@@ -132,11 +139,9 @@ var develop = [
 ];
 
 gulp.task('develop', develop, function(){
-    lrServer.listen( 35729, function(err){
-        gulp.watch(paths.src.coffee, develop);
-        gulp.watch(paths.src.less, develop);
-        gulp.watch(paths.src.jade, develop);
-    })
+    gulp.watch(paths.src.coffee, develop);
+    gulp.watch(paths.src.less, develop);
+    gulp.watch(paths.src.jade, develop);
 });
 
 gulp.task('default', [ 'develop' ]);
