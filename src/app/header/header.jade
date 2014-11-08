@@ -12,7 +12,7 @@
       div.search(layout="horizontal" layout-align="start center" ng-if='enableSearch')
         .search-icon-wrapper
           .search-icon(ng-class='searchLoading?"loading":""') &nbsp;
-        input(placeholder='Search' ng-click='search=true' ng-model='term' ng-change='termChange()')
+        input(placeholder='Search' ng-click='searchClick()' ng-model='term' ng-change='termChange()')
       div.right
   #search-content(ng-show='search')
     .cards

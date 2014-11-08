@@ -19,6 +19,7 @@ window.app
   $scope.exitSearch = ->
     $scope.search = no
     $scope.term = ''
+    console.log('exit search')
 
   $scope.titleClick = ->
     if $scope.search
@@ -28,6 +29,8 @@ window.app
     if $scope.search
       $scope.exitSearch()
       return
+  $scope.searchClick = ->
+    $scope.search = yes
   $scope.term = ''
   $scope.searchLoading = no
 

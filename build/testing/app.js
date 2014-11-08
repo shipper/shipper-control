@@ -1573,7 +1573,8 @@
       });
       $scope.exitSearch = function() {
         $scope.search = false;
-        return $scope.term = '';
+        $scope.term = '';
+        return console.log('exit search');
       };
       $scope.titleClick = function() {
         if ($scope.search) {
@@ -1584,6 +1585,9 @@
         if ($scope.search) {
           $scope.exitSearch();
         }
+      };
+      $scope.searchClick = function() {
+        return $scope.search = true;
       };
       $scope.term = '';
       $scope.searchLoading = false;
