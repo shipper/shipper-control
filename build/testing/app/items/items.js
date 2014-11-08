@@ -8,12 +8,6 @@
     }
   ]).controller('ItemsCtrl', [
     '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
-      $rootScope.$broadcast('hide-nav');
-      $scope.$on('$routeChangeStart', function(next) {
-        if (next === 'items' || next === '/items') {
-          return $rootScope.$broadcast('hide-nav');
-        }
-      });
       $scope.sideMenu = {
         icon: 'images/icons/ic_add_24px.svg',
         tooltip: 'Add Item',
@@ -21,6 +15,7 @@
           return $location.path('item');
         }
       };
+      $rootScope.$broadcast('enable-search');
       $scope.items = [
         {
           description: 'test',

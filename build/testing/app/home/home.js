@@ -9,10 +9,11 @@
       });
     }
   ]).controller('HomeCtrl', [
-    '$scope', '$location', function($scope, $location) {
-      return $scope.items = function() {
+    '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
+      $scope.items = function() {
         return $location.path('items');
       };
+      return $rootScope.$broadcast('enable-search');
     }
   ]);
 

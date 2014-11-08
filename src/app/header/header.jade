@@ -3,6 +3,29 @@
   Unauthorized copying of this file, via any medium is strictly prohibited
   Proprietary and confidential
   Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
-md-toolbar
-  h2.md-toolbar-tools
-    span Shipper
+#header(ng-controller='HeaderCtrl')
+  md-toolbar#header-toolbar.md-whiteframe-z1
+    .md-toolbar-tools(layout="horizontal" layout-align="center center" ng-class='search?"search-active":""')
+      div.left(layout="horizontal" layout-align="start center")
+        .menu-icon(ng-click='menuClick()') &nbsp;
+        .title(ng-click='titleClick()') {{search?'Back':title||'Shipper'}}
+      div.search(layout="horizontal" layout-align="start center" ng-if='enableSearch')
+        .search-icon-wrapper
+          .search-icon(ng-class='searchLoading?"loading":""') &nbsp;
+        input(placeholder='Search' ng-click='search=true' ng-model='term' ng-change='termChange()')
+      div.right
+  #search-content(ng-show='search')
+    .cards
+      .card-wrapper(ng-if='term && items && items.length')
+        .card
+          .search-item(ng-repeat='item in items | filter:term | limitTo: 5' layout='horizontal' layout-align="start center")
+            .search-item-icon-wrapper
+              .search-item-icon &nbsp;
+            .search-item-content {{item}}
+      .card-wrapper(ng-if='term && items && items.length')
+        .card-header All Results
+        .card
+          .search-item(ng-repeat='item in items | filter:term' layout='horizontal' layout-align="start center")
+            .search-item-icon-wrapper
+              .search-item-icon &nbsp;
+            .search-item-content {{item}}

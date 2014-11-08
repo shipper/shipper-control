@@ -11,17 +11,13 @@ window.app
     )
   ])
 .controller( 'ItemsCtrl', ['$scope', '$location', '$rootScope', ($scope, $location, $rootScope) ->
-  $rootScope.$broadcast('hide-nav')
-  $scope.$on('$routeChangeStart', (next) ->
-    if next is 'items' or next is '/items'
-      $rootScope.$broadcast('hide-nav')
-  )
   $scope.sideMenu = {
     icon: 'images/icons/ic_add_24px.svg'
     tooltip: 'Add Item'
     click: ->
       $location.path('item')
   }
+  $rootScope.$broadcast('enable-search')
   $scope.items = [
     {
       description: 'test'

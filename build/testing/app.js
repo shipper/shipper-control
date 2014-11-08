@@ -1561,6 +1561,70 @@
 }).call(this);
 
 (function() {
+  window.app.controller('HeaderCtrl', [
+    '$scope', '$timeout', function($scope, $timeout) {
+      $scope.search = false;
+      $scope.enableSearch = false;
+      $scope.$on('enable-search', function() {
+        return $scope.enableSearch = true;
+      });
+      $scope.$on('$routeChangeStart', function() {
+        return $scope.enableSearch = false;
+      });
+      $scope.exitSearch = function() {
+        $scope.search = false;
+        return $scope.term = '';
+      };
+      $scope.titleClick = function() {
+        if ($scope.search) {
+          $scope.exitSearch();
+        }
+      };
+      $scope.menuClick = function() {
+        if ($scope.search) {
+          $scope.exitSearch();
+        }
+      };
+      $scope.term = '';
+      $scope.searchLoading = false;
+      $scope.termChange = function() {
+        $scope.items = [];
+        $scope.searchLoading = true;
+        return $timeout(function() {
+          var countries, country, items, _i, _len;
+          countries = getCountryList();
+          items = [];
+          for (_i = 0, _len = countries.length; _i < _len; _i++) {
+            country = countries[_i];
+            if (!country) {
+              continue;
+            }
+            if (!country.header || !country.subheader) {
+              continue;
+            }
+            items.push("" + country.header + ", " + country.subheader);
+          }
+          $scope.items = items;
+          return $scope.searchLoading = false;
+        }, Math.floor(Math.random() * 1500));
+      };
+      return angular.element('.search-content').on('click', function(event) {
+        var element;
+        element = angular.element(event.target);
+        if (!element) {
+          return;
+        }
+        if (element.is("#search-content")) {
+          $scope.exitSearch();
+        }
+        return $scope.$apply();
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
   window.app.config([
     '$routeProvider', function($routeProvider) {
       return $routeProvider.when('/home', {
@@ -1571,10 +1635,11 @@
       });
     }
   ]).controller('HomeCtrl', [
-    '$scope', '$location', function($scope, $location) {
-      return $scope.items = function() {
+    '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
+      $scope.items = function() {
         return $location.path('items');
       };
+      return $rootScope.$broadcast('enable-search');
     }
   ]);
 
@@ -2282,12 +2347,6 @@
     }
   ]).controller('ItemsCtrl', [
     '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
-      $rootScope.$broadcast('hide-nav');
-      $scope.$on('$routeChangeStart', function(next) {
-        if (next === 'items' || next === '/items') {
-          return $rootScope.$broadcast('hide-nav');
-        }
-      });
       $scope.sideMenu = {
         icon: 'images/icons/ic_add_24px.svg',
         tooltip: 'Add Item',
@@ -2295,6 +2354,7 @@
           return $location.path('item');
         }
       };
+      $rootScope.$broadcast('enable-search');
       $scope.items = [
         {
           description: 'test',

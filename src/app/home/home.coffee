@@ -13,7 +13,8 @@ window.app
       redirectTo: 'home'
     })
   ])
-.controller( 'HomeCtrl', ['$scope', '$location', ($scope, $location) ->
+.controller( 'HomeCtrl', ['$scope', '$location', '$rootScope', ($scope, $location, $rootScope) ->
   $scope.items = ->
     $location.path('items')
+  $rootScope.$broadcast('enable-search')
 ])

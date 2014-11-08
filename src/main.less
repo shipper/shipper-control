@@ -4,8 +4,11 @@
   Proprietary and confidential
   Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
 */
+
+@background-color: #ececec;
+
 body, html{
-  background-color: #dcdcdc !important;
+  background-color: @background-color !important;
 }
 
 @media (min-width: 600px) {
@@ -24,12 +27,12 @@ body, html{
   }
 }
 .margin-reactive(){
-  margin: 15px;
+  margin: 30px;
   @media (min-width: 960px) {
-    margin: 30px;
+    margin: 30px 120px;
   }
   @media (min-width: 1200px) {
-    margin: 50px;
+    margin: 50px 300px;
   }
 }
 
@@ -157,14 +160,6 @@ md-input-group {
   }
 }
 #items{
-  .search{
-    background-color:rgba(255, 255, 255, 0.15);
-    margin: 0 auto;
-    input{
-      width: 500px;
-      margin: 0 20px;
-    }
-  }
   #items-content{
     .margin-reactive();
     .padding-reactive();
@@ -172,6 +167,250 @@ md-input-group {
       position: absolute;
       top: 15px;
       right: 15px;
+    }
+  }
+}
+#header{
+
+  #search-content{
+    background-color: @background-color;
+    z-index: 199;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    ::selection{
+      background-color: transparent;
+    }
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    /* this will work for QtWebKit in future */
+    -webkit-user-drag: none;
+    user-drag: none;
+
+    .cards{
+      margin: 0 auto 2em auto;
+      width: 70%;
+      padding: 0 8px;
+
+      .card-wrapper{
+        .card-header{
+          color:#999;
+          padding-top:20px;
+          padding-left:22px;
+          padding-bottom:10px;
+          border:none;
+          line-height: 1.5;
+        }
+        .card{
+          box-shadow: 0 1px 1px 0 rgba(0,0,0,.26);
+          background-color: white;
+
+          .search-item:last-child{
+            .search-item-content{
+              border-bottom: none;
+            }
+          }
+
+          .search-item {
+            cursor: pointer;
+            &:hover, &:focus{
+              background-color: darken(#fff, 5%);
+            }
+
+            height: 50px;
+            line-height: 50px;
+            .search-item-icon-wrapper{
+              margin: 0 20px;
+              width: 72px;
+
+              .search-item-icon{
+                width: 24px;
+                height: 24px;
+                margin:0 auto;
+                background-image:url('images/icons/ic_search_grey600_24dp.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+              }
+            }
+            .search-item-content{
+              flex:1;
+              margin-right: 72px;
+              border-bottom: 1px solid #eee;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #header-toolbar{
+    z-index: 200;
+    .md-toolbar-tools{
+      &.search-active{
+        color: #666;
+        background-color:#eee;
+        .left{
+          .menu-icon{
+            background-image:url('images/icons/ic_arrow_back_grey600_24dp.png');
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.3);
+              border-radius: 50%;
+            }
+          }
+          .menu-icon, .title {
+            cursor:pointer;
+          }
+        }
+        .search{
+          background-color:#fff;
+          .search-icon-wrapper{
+            .search-icon{
+              background-image:url('images/icons/ic_search_black_24dp.png');
+              &.loading{
+                background-image:none;
+                border: 2px solid #4285f4;
+                border-top-color: transparent;
+                border-radius: 50%;
+                -webkit-animation: spin 1.1s infinite linear;
+                animation: spin 1.1s infinite linear;
+              }
+            }
+          }
+          input{
+            color: #333 !important;
+            @color: #ddd;
+            &::-webkit-input-placeholder {
+              color: @color !important;
+            }
+
+            &:-moz-placeholder { /* Firefox 18- */
+              color: @color !important;
+            }
+
+            &::-moz-placeholder {  /* Firefox 19+ */
+              color: @color !important;
+            }
+
+            &:-ms-input-placeholder {
+              color: @color !important;
+            }
+          }
+        }
+      }
+
+      width: 100%;
+      .right, .left{
+        flex:1
+      }
+
+
+      @media(max-width:600px){
+        .right{
+          display:none;
+        }
+        .left{
+          width: 72px;
+          flex: none;
+        }
+      }
+
+      .left{
+        .menu-icon{
+          background-image:url('images/icons/ic_menu_white_24dp.png');
+          background-repeat: no-repeat;
+          background-position: center;
+          &::-moz-selection { /* Code for Firefox */
+            background: none;
+          }
+          &::selection {
+            background: none;
+          }
+          width:30px;
+          height:30px;
+          margin-right: 1em;
+          &:hover{
+            cursor:pointer;
+          }
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+          }
+        }
+        .title{
+          display:none;
+          @media (min-width: 960px) {
+            display:inline-block;
+          }
+          @media (min-width: 1200px) {
+            display:inline-block;
+          }
+        }
+      }
+
+      .search{
+        background-color:rgba(255, 255, 255, 0.15);
+        margin: 0 auto;
+        border-radius: 4px;
+        width: 70%;
+
+        @media(max-width:600px){
+          flex:1
+        }
+
+        .search-icon-wrapper{
+          margin: 0 20px;
+          width: 72px;
+
+
+          .search-icon{
+            width: 24px;
+            height: 24px;
+            margin:0 auto;
+            background-image:url('images/icons/ic_search_white_24dp.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+          }
+        }
+
+        input{
+          margin: 0;
+          color: #fff !important;
+          background:none;
+          box-sizing: border-box;
+          display:block;
+          font-size:16px;
+          height:36px;
+          width:100%;
+          border:none;
+          outline:none;
+
+          &::-webkit-input-placeholder {
+            color: #fff !important;
+          }
+
+          &:-moz-placeholder { /* Firefox 18- */
+            color: #fff !important;
+          }
+
+          &::-moz-placeholder {  /* Firefox 19+ */
+            color: #fff !important;
+          }
+
+          &:-ms-input-placeholder {
+            color: #fff !important;
+          }
+        }
+      }
     }
   }
 }

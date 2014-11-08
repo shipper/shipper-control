@@ -21,5 +21,4 @@ window.app = angular.module('ngShipper', [
       $scope.$on('show-nav', ->
         $scope.hideNav = no
       )
-
 ])
