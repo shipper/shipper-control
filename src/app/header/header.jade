@@ -9,7 +9,7 @@
       div.left(layout="horizontal" layout-align="start center")
         .menu-icon(ng-click='menuClick()') &nbsp;
         .title(ng-click='titleClick()') {{search?'Back':title||'Shipper'}}
-      div.search(layout="horizontal" layout-align="start center" ng-if='enableSearch')
+      div.search(layout="horizontal" layout-align="start center" ng-show='enableSearch')
         .search-icon-wrapper
           .search-icon(ng-class='searchLoading?"loading":""') &nbsp;
         input(placeholder='Search' ng-click='searchClick()' ng-model='term' ng-change='termChange()')
