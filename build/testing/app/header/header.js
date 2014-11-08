@@ -50,7 +50,7 @@
           return $scope.searchLoading = false;
         }, Math.floor(Math.random() * 1500));
       };
-      return angular.element('.search-content').on('click', function(event) {
+      return angular.element('#search-content').on('click', function(event) {
         var element;
         element = angular.element(event.target);
         if (!element) {

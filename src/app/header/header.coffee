@@ -53,7 +53,7 @@ window.app
     , Math.floor(Math.random() * 1500)
     )
 
-  angular.element('.search-content').on('click', (event) ->
+  angular.element('#search-content').on('click', (event) ->
     element = angular.element(event.target)
     if not element
       return
