@@ -19,6 +19,7 @@ div(layout="horizontal" id="general")
     md-text-float(label='Sale Price ($)' ng-model='general.sale')
   div.column(flex layout="vertical")
     md-button.md-button(
+      aria-label="Select facility"
       ng-click='general.selectFacility()'
       ng-class='general.facility ? "" : "md-raised"'
     )
@@ -26,6 +27,7 @@ div(layout="horizontal" id="general")
       span(ng-if='general.facility') {{general.facility.header}}
     br
     md-button.md-button(
+      aria-label="Select customer"
       ng-click='general.selectCustomer()'
       ng-class='general.customer ? "" : "md-raised"'
     )
@@ -33,10 +35,11 @@ div(layout="horizontal" id="general")
       span(ng-if='general.customer') {{general.customer.header}}
     br
     md-button.md-button(
+      aria-label="Select country of manufacture"
       ng-click='general.selectCountry()'
       ng-class='general.customer ? "" : "md-raised"'
     )
       span(ng-if='!general.country') Country of Manufacture
       span(ng-if='general.country') {{general.country.header}}
     br
-    md-button.md-raised.md-button(ng-click='general.selectCategory()') Category
+    md-button.md-raised.md-button(ng-click='general.selectCategory()' aria-label="Select category") Category

@@ -1,18 +1,25 @@
 (function() {
   window.app.controller('HeaderCtrl', [
-    '$scope', '$timeout', function($scope, $timeout) {
+    '$scope', '$timeout', '$location', function($scope, $timeout, $location) {
       $scope.search = false;
+      $scope.enableMenu = true;
       $scope.enableSearch = false;
       $scope.$on('enable-search', function() {
         return $scope.enableSearch = true;
       });
-      $scope.$on('$routeChangeStart', function() {
+      $scope.$on('$routeChangeStart', function(next) {
         return $scope.enableSearch = false;
+      });
+      $scope.$on('$routeChangeSuccess', function(next) {
+        if ($location.path() === 'home' || $location.path() === '/home') {
+          return $scope.enableMenu = false;
+        } else {
+          return $scope.enableMenu = true;
+        }
       });
       $scope.exitSearch = function() {
         $scope.search = false;
-        $scope.term = '';
-        return console.log('exit search');
+        return $scope.term = '';
       };
       $scope.titleClick = function() {
         if ($scope.search) {
@@ -20,12 +27,24 @@
         }
       };
       $scope.menuClick = function() {
+        var body;
         if ($scope.search) {
           $scope.exitSearch();
+          return;
         }
+        $scope.showMenu = !$scope.showMenu;
+        body = angular.element('body');
+        body[$scope.showMenu ? 'addClass' : 'removeClass']('menu-visible');
+      };
+      $scope.hideMenu = function() {
+        var body;
+        $scope.showMenu = false;
+        body = angular.element('body');
+        body.removeClass('menu-visible');
       };
       $scope.searchClick = function() {
-        return $scope.search = true;
+        $scope.search = true;
+        return $scope.hideMenu();
       };
       $scope.term = '';
       $scope.searchLoading = false;
@@ -50,7 +69,7 @@
           return $scope.searchLoading = false;
         }, Math.floor(Math.random() * 1500));
       };
-      return angular.element('#search-content').on('click', function(event) {
+      angular.element('#search-content').on('click', function(event) {
         var element;
         element = angular.element(event.target);
         if (!element) {
@@ -61,6 +80,10 @@
         }
         return $scope.$apply();
       });
+      return $scope.goto = function(route) {
+        $scope.showMenu = false;
+        return $location.path(route);
+      };
     }
   ]);
 

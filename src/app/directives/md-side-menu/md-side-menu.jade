@@ -21,7 +21,8 @@ div.md-side-menu(
         ng-click='internalItemClick(item, $index)'
         ng-class="item.class"
       )
-        md-icon.standard(ng-visible='open' icon='{{item.icon}}')
+        md-icon.standard(ng-if='item.icon' ng-visible='open' icon='{{item.icon}}')
+        div(ng-if='item.iconClass' ng-class='item.iconClass')
     .md-side-menu-group(layout='horizontal' layout-align='end' flex)
       div(layout='vertical' layout-align='center' layout-padding)
         label.tooltip-wrapper(layout='vertical' flex)
@@ -31,7 +32,7 @@ div.md-side-menu(
         ng-mouseenter='menuHover=true'
         ng-mouseleave='menuHover=false'
       )
-        md-icon.main(icon='images/icons/ic_more_vert_24px.svg')
+        .ic.ic_more_vert_24
   div.singe(ng-if='internalItems.length === 1')
     .md-side-menu-group(layout='horizontal' layout-align='end' flex)
       div(layout='vertical' layout-align='center' layout-padding)
@@ -43,4 +44,5 @@ div.md-side-menu(
         ng-mouseleave='internalItems[0].hover=false'
         ng-class='internalItems[0].class'
       )
-        md-icon.main(icon='{{internalItems[0].icon}}')
+        md-icon.main(ng-if='internalItems[0].icon' icon='{{internalItems[0].icon}}')
+        div(ng-if='internalItems[0].iconClass' ng-class='internalItems[0].iconClass')

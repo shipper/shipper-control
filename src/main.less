@@ -4,6 +4,7 @@
   Proprietary and confidential
   Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/11/14
 */
+@import 'images';
 
 @background-color: #ececec;
 
@@ -29,10 +30,10 @@ body, html{
 .margin-reactive(){
   margin: 30px;
   @media (min-width: 960px) {
-    margin: 30px 120px;
+    margin: 30px;
   }
   @media (min-width: 1200px) {
-    margin: 50px 300px;
+    margin: 50px;
   }
 }
 
@@ -172,6 +173,70 @@ md-input-group {
 }
 #header{
 
+  #content-overlay{
+    z-index: 150;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  #menu{
+    z-index: 201;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    /* this will work for QtWebKit in future */
+    -webkit-user-drag: none;
+    user-drag: none;
+
+    #menu-content{
+      height:100%;
+      [role='list']{
+        height: 100%;
+        [role='listitem']{
+          cursor: pointer;
+
+          md-item-content:hover{
+            background-color: darken(#fff, 5%);
+          }
+
+          min-height: 56px;
+          width:100%;
+          .md-tile-left{
+            padding:18px;
+            max-width:72px;
+            width:72px;
+            position:absolute;
+            top:0;
+            left:0;
+            .ic {
+              width:24px;
+              height:24px;
+            }
+          }
+          .md-tile-content{
+            margin-left:48px;
+          }
+        }
+      }
+    }
+
+  }
+
+  .transition(){
+    -webkit-transition: all 500ms cubic-bezier(.25,.25,0,1);
+    transition: all 500ms cubic-bezier(.25,.25,0,1);
+  }
+
   #search-content{
     background-color: @background-color;
     z-index: 199;
@@ -182,6 +247,7 @@ md-input-group {
     right: 0;
     overflow-y: auto;
     overflow-x: hidden;
+    display: block;
 
     ::selection{
       background-color: transparent;
@@ -255,6 +321,8 @@ md-input-group {
     z-index: 200;
     .md-toolbar-tools{
       &.search-active{
+        -webkit-transition: all 500ms cubic-bezier(.25,.25,0,1);
+        transition: all 500ms cubic-bezier(.25,.25,0,1);
         color: #666;
         background-color:#eee;
         .left{
@@ -285,6 +353,7 @@ md-input-group {
             }
           }
           input{
+            .transition();
             color: #333 !important;
             @color: #ddd;
             &::-webkit-input-placeholder {
@@ -322,6 +391,8 @@ md-input-group {
         }
       }
 
+      .transition();
+
       .left{
         .menu-icon{
           background-image:url('images/icons/ic_menu_white_24dp.png');
@@ -339,7 +410,7 @@ md-input-group {
           &:hover{
             cursor:pointer;
           }
-          &:hover {
+          &:hover, &.menu-active {
             background-color: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
           }
@@ -360,6 +431,7 @@ md-input-group {
         margin: 0 auto;
         border-radius: 4px;
         width: 70%;
+        .transition();
 
         @media(max-width:600px){
           flex:1
@@ -393,6 +465,7 @@ md-input-group {
           width:100%;
           border:none;
           outline:none;
+          .transition();
 
           &::-webkit-input-placeholder {
             color: #fff !important;

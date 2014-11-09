@@ -1,5 +1,5 @@
 (function() {
-  window.app = angular.module('ngShipper', ['ngMaterial', 'ngRoute', 'angular-inview']).controller('AppCtrl', [
+  window.app = angular.module('ngShipper', ['ngMaterial', 'ngRoute', 'angular-inview', 'indexedDB', 'uuid']).controller('AppCtrl', [
     '$scope', function($scope) {
       $scope.$on('$routeChangeStart', function() {
         return $scope.hideNav = false;
@@ -12,6 +12,39 @@
       });
     }
   ]);
+
+}).call(this);
+
+(function() {
+  var failed, tests, val, _i, _len;
+
+  failed = false;
+
+  Modernizr.addTest("cssscrollbar", function() {
+    var bool, styles;
+    bool = void 0;
+    styles = "#modernizr{overflow: scroll; width: 40px }#" + Modernizr._prefixes.join("scrollbar{width:0px}" + " #modernizr::").split("#").slice(1).join("#") + "scrollbar{width:0px}";
+    Modernizr.testStyles(styles, function(node) {
+      bool = "scrollWidth" in node && node.scrollWidth === 40;
+    });
+    return bool;
+  });
+
+  tests = [Modernizr.indexeddb, Modernizr.opacity, Modernizr.flexbox, Modernizr.history, Modernizr.localstorage, Modernizr.svg, Modernizr.websockets, !!window["Promise"], Modernizr.draganddrop, Modernizr.rgba, Modernizr.input.placeholder, Modernizr.boxshadow, Modernizr.borderradius, Modernizr.webworkers, Modernizr.cssanimations, 'Notification' in window && 'permission' in window.Notification && 'requestPermission' in window.Notification, 'download' in document.createElement('a'), Modernizr.cssscrollbar];
+
+  for (_i = 0, _len = tests.length; _i < _len; _i++) {
+    val = tests[_i];
+    if (!val) {
+      failed = true;
+      break;
+    }
+  }
+
+  window.canuse = !failed;
+
+  if (!canuse) {
+    window.location.href = "http://outdatedbrowser.com/en";
+  }
 
 }).call(this);
 
@@ -1443,6 +1476,554 @@
 }).call(this);
 
 (function() {
+  var schema;
+
+  schema = {
+    $schema: "http://json-schema.org/draft-03/schema",
+    id: "http://control.shipper.co.nz/database-schema.js",
+    required: false,
+    type: "object",
+    definitions: {
+      User: {
+        id: "User",
+        type: "object",
+        properties: {
+          FirstName: {
+            type: "string"
+          },
+          LastName: {
+            type: "string"
+          },
+          Type: {
+            type: {
+              "enum": ["Developer", "Internal", "Supplier", "Facility", "Consumer"]
+            }
+          },
+          Role: {
+            type: {
+              "enum": ["Admin", "Standard", "Limited"]
+            }
+          },
+          Trial: {
+            type: "boolean"
+          },
+          Facilities: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Facility"
+            }
+          }
+        },
+        required: ["FirstName", "LastName", "Role", "Type", "Facilities"]
+      },
+      ISO3166_1: {
+        id: "ISO3166_1",
+        type: "object",
+        properties: {
+          Alpha2: {
+            type: "string"
+          },
+          Alpha3: {
+            type: "string"
+          },
+          Numeric: {
+            type: "number"
+          },
+          CountryName: {
+            type: "string"
+          },
+          ShortName: {
+            type: "string"
+          },
+          FullName: {
+            type: "string"
+          },
+          Remarks: {
+            type: "string"
+          },
+          Independent: {
+            type: "string"
+          }
+        }
+      },
+      ISO3166_2: {
+        id: "ISO3166_2",
+        type: "object",
+        properties: {
+          Code: {
+            type: "string"
+          },
+          SubdivisionName: {
+            type: "string"
+          },
+          SubdivisionCategory: {
+            type: "string"
+          },
+          LanguageCode: {
+            type: "string"
+          },
+          RomanizationSystem: {
+            type: "string"
+          },
+          ParentSubdivsion: {
+            type: "string"
+          }
+        }
+      },
+      Country: {
+        id: "Country",
+        type: "object",
+        properties: {
+          Name: {
+            type: "string"
+          },
+          ISO3166_1: {
+            type: {
+              $ref: "#/definitions/ISO3166_1"
+            }
+          }
+        }
+      },
+      Address: {
+        id: "Address",
+        type: "object",
+        properties: {
+          Number: {
+            type: "number"
+          },
+          Unit: {
+            type: "string"
+          },
+          Street: {
+            type: "string"
+          },
+          Suburb: {
+            type: "string"
+          },
+          City: {
+            type: "string"
+          },
+          Postcode: {
+            type: "string"
+          },
+          Region: {
+            type: "string"
+          },
+          Country: {
+            type: "string"
+          },
+          Additional: {
+            type: "string"
+          },
+          ISO3166_1: {
+            type: {
+              $ref: "#/definitions/ISO3166_1"
+            }
+          },
+          ISO3166_2: {
+            type: {
+              $ref: "#/definitions/ISO3166_2"
+            }
+          }
+        },
+        required: ["Street", "Suburb", "Postcode"]
+      },
+      Consumer: {
+        id: "Consumer",
+        type: "object",
+        properties: {
+          BillingAddress: {
+            type: {
+              $ref: "#/definitions/Address"
+            }
+          },
+          ShippingAddress: {
+            type: {
+              $ref: "#/definitions/Address"
+            }
+          }
+        }
+      },
+      ItemPallet: {
+        id: "Pallet",
+        type: "object",
+        properties: {
+          Measurement: {
+            type: {
+              $ref: "#/definitions/Measurement"
+            }
+          },
+          ItemsPerTier: {
+            type: "number"
+          },
+          Tiers: {
+            type: "number"
+          }
+        }
+      },
+      ItemGrouping: {
+        id: "Grouping",
+        type: "object",
+        properties: {
+          Name: {
+            type: "string"
+          },
+          Items: {
+            type: "number"
+          },
+          Measurement: {
+            type: {
+              $ref: "#/definitions/Measurement"
+            }
+          }
+        }
+      },
+      ItemVariationProperty: {
+        id: "ItemVariationProperty",
+        type: "object",
+        properties: {
+          PropertyName: {
+            type: "string"
+          },
+          PropertyValue: {
+            type: "any"
+          }
+        }
+      },
+      ItemVariation: {
+        id: "ItemVariation",
+        type: "object",
+        properties: {
+          StockKeepingUnit: {
+            type: "string"
+          },
+          Description: {
+            type: "string"
+          },
+          Variations: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/ItemVariationProperty"
+            }
+          },
+          Item: {
+            type: {
+              $ref: "#/definitions/Item"
+            }
+          }
+        }
+      },
+      Item: {
+        id: "Item",
+        type: "object",
+        properties: {
+          StockKeepingUnit: {
+            type: "string"
+          },
+          UniversalProductCode: {
+            type: "string"
+          },
+          Description: {
+            type: "string"
+          },
+          DescriptionExtended: {
+            type: "string"
+          },
+          LeadTime: {
+            type: "number"
+          },
+          SafetyStock: {
+            type: "number"
+          },
+          MinimumStock: {
+            type: "number"
+          },
+          MaximumStock: {
+            type: "number"
+          },
+          PurchasePrice: {
+            type: "number"
+          },
+          SalePrice: {
+            type: "number"
+          },
+          SKU: {
+            type: "string"
+          },
+          Measurement: {
+            type: {
+              $ref: "#/definitions/Measurement"
+            }
+          },
+          Pallet: {
+            type: {
+              $ref: "#/definitions/ItemPallet"
+            }
+          },
+          Grouping: {
+            type: {
+              $ref: "#/definitions/ItemGrouping"
+            }
+          },
+          Variations: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/ItemVariation"
+            }
+          }
+        }
+      },
+      Measurement: {
+        id: "Measurement",
+        type: "object",
+        properties: {
+          Length: {
+            type: "number"
+          },
+          Width: {
+            type: "number"
+          },
+          Height: {
+            type: "number"
+          },
+          Weight: {
+            type: "number"
+          },
+          Imperial: {
+            type: "boolean"
+          }
+        }
+      },
+      AdHocItem: {
+        id: "AdHocItem",
+        type: "object",
+        properties: {
+          Description: {
+            type: "string"
+          },
+          PurchasePrice: {
+            type: "number"
+          },
+          SalePrice: {
+            type: "number"
+          },
+          SKU: {
+            type: "string"
+          },
+          Measurement: {
+            type: {
+              $ref: "#/definitions/Measurement"
+            }
+          }
+        }
+      },
+      Date: {
+        id: "Date",
+        type: "object",
+        properties: {
+          Time: {
+            description: "Milliseconds since January 1, 1970, 00:00:00 UTC",
+            type: "number"
+          }
+        }
+      },
+      SerialScan: {
+        id: "SerialScan",
+        type: "object",
+        properties: {
+          SerialNumber: {
+            type: "string"
+          },
+          ScanDate: {
+            type: "number"
+          }
+        }
+      },
+      Note: {
+        id: "Note",
+        type: "object",
+        properties: {
+          User: {
+            type: {
+              $ref: "#/definitions/User"
+            }
+          },
+          Note: {
+            type: "string"
+          },
+          LimitType: {
+            type: "string"
+          },
+          LimitRole: {
+            type: "string"
+          },
+          CreateDate: {
+            type: "number"
+          }
+        }
+      },
+      OrderItem: {
+        id: "OrderItem",
+        type: "object",
+        properties: {
+          Item: {
+            type: {
+              $ref: "#/definitions/Item"
+            }
+          },
+          AdHocItem: {
+            type: {
+              $ref: "#/definitions/AdHocItem"
+            }
+          },
+          Serials: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/SerialScan"
+            }
+          },
+          Reference: {
+            type: "string"
+          },
+          PurchaseNumber: {
+            type: "string"
+          },
+          Notes: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Note"
+            }
+          }
+        }
+      },
+      SendOrder: {
+        id: "SendOrder",
+        type: "object",
+        properties: {
+          Items: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/OrderItem"
+            }
+          },
+          Address: {
+            type: {
+              $ref: "#/definitions/Address"
+            }
+          }
+        }
+      },
+      StoreOrder: {
+        id: "StoreOrder",
+        type: "object",
+        properties: {
+          CreateDate: {
+            type: "number"
+          },
+          Items: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Item"
+            }
+          },
+          ExpectedArrival: {
+            type: "number"
+          },
+          Arrival: {
+            type: "number"
+          },
+          TrackingNumber: {
+            type: "string"
+          },
+          ProgressiveNumber: {
+            type: "string"
+          },
+          TrailerNumber: {
+            type: "string"
+          },
+          ContainerNumber: {
+            type: "string"
+          },
+          CapacityType: {
+            type: "string",
+            "enum": ["20ft Container", "40ft Container", "45ft Container", "48ft Trailer", "53ft Trailer"]
+          },
+          SealNumber: {
+            type: "string"
+          },
+          Notes: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Note"
+            }
+          },
+          Facility: {
+            type: {
+              $ref: "#/definitions/Facility"
+            }
+          },
+          User: {
+            type: {
+              $ref: "#/definitions/User"
+            }
+          }
+        }
+      },
+      Facility: {
+        id: "Facility",
+        type: "object",
+        properties: {
+          Name: {
+            type: "string"
+          },
+          Location: "string",
+          Group: {
+            type: {
+              $ref: "#/definitions/Group"
+            }
+          }
+        }
+      },
+      Group: {
+        id: "Group",
+        type: "object",
+        properties: {
+          Name: {
+            type: "string"
+          }
+        }
+      }
+    }
+  };
+
+  this.databaseSchema = {
+    schema: schema,
+    links: [
+      {
+        link: ["#/definitions/Group", "#/definitions/User"],
+        path: "#/definitions/Group/Facility/Users"
+      }, {
+        link: ["#/definitions/Group", "#/definitions/SendOrder"],
+        path: "#/definitions/Group/Facility/SendOrders"
+      }, {
+        link: ["#/definitions/Group", "#/definitions/StoreOrder"],
+        path: "#/definitions/Group/Facility/StoreOrders"
+      }, {
+        link: ["#/definitions/User", "#/definitions/SendOrders"],
+        path: "#/definitions/User/Facility/SendOrders"
+      }, {
+        link: ["#/definitions/User", "#/definitions/StoreOrder"],
+        path: "#/definitions/User/Facility/StoreOrders"
+      }, {
+        link: ["#/definitions/User", "#/definitions/StoreOrder"],
+        path: "#/definitions/User/Facility/StoreOrders"
+      }
+    ]
+  };
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -1561,20 +2142,466 @@
 }).call(this);
 
 (function() {
+  var $dataFactory, definition, definitions, getDefinition, index, indexIndex, indexVal, indexValue, key, keyIndex, keys, name, parsed, path, val, _i, _j, _k, _len, _len1, _len2, _ref;
+
+  definitions = [[], ["AdHocItem", "Address", "Consumer", "Country", "Date", "Facility", "Group", "ISO3166_1", "ISO3166_2", "Item", "ItemGrouping", "ItemPallet", "ItemVariation", "ItemVariationProperty", "Measurement", "Note", "OrderItem", "SendOrder", "SerialScan", "StoreOrder", "User"]];
+
+  getDefinition = function(name) {
+    var definition;
+    if (!"databaseSchema" in window) {
+      return;
+    }
+    if (!"schema" in window.databaseSchema) {
+      return;
+    }
+    if (!"definitions" in window.databaseSchema.schema) {
+      return;
+    }
+    definition = window.databaseSchema.schema.definitions[name];
+    if (!definition) {
+      return;
+    }
+    return definition;
+  };
+
+  parsed = {};
+
+  index = 0;
+
+  for (_i = 0, _len = definitions.length; _i < _len; _i++) {
+    keys = definitions[_i];
+    keyIndex = 0;
+    for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
+      key = keys[_j];
+      val = {};
+      if (key instanceof Object) {
+        val = {
+          name: key.name,
+          keyPath: key.keyPath || "$$key",
+          indexes: _.cloneDeep(key.indexes) || []
+        };
+      } else {
+        val = {
+          name: key,
+          keyPath: "$$key",
+          indexes: []
+        };
+      }
+      indexIndex = 0;
+      _ref = val.indexes;
+      for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
+        indexValue = _ref[_k];
+        indexVal = {};
+        if (indexValue instanceof Object) {
+          path = indexValue.path;
+          name = null;
+          if (!path) {
+            path = indexValue.name;
+            name = "" + path + "_index";
+          } else {
+            name = indexValue.name;
+          }
+          indexVal = {
+            name: name,
+            path: path,
+            unique: indexValue.unique || false
+          };
+        } else {
+          indexVal = {
+            name: "" + indexValue + "_index",
+            path: indexValue,
+            unique: false
+          };
+        }
+        val.indexes[indexIndex] = indexVal;
+        indexIndex++;
+      }
+      definition = getDefinition(val.name);
+      if (definition) {
+        val.$definition = definition;
+      }
+      parsed[val.name] = val;
+      definitions[index][keyIndex] = val;
+      keyIndex++;
+    }
+    index++;
+  }
+
+  window.$$parsedDatabaseDefinition = parsed;
+
+  window.$$databaseDefinitions = definitions;
+
+  $dataFactory = function($q, $indexedDB, rfc4122) {
+    var DataDefinition, actions, execute, factory, generateMap, getArguments;
+    actions = {
+      GetAllKeys: {
+        method: "getAllKeys",
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      Clear: {
+        method: "clear",
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      Delete: {
+        method: "delete",
+        fn: function(name, definition, key, value, index) {
+          return [key];
+        }
+      },
+      Upsert: {
+        method: "upsert",
+        insert: true,
+        fn: function(name, definition, key, value, index) {
+          return [value];
+        }
+      },
+      Insert: {
+        method: "insert",
+        insert: true,
+        fn: function(name, definition, key, value, index) {
+          return [value];
+        }
+      },
+      GetAll: {
+        method: "getAll",
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      Count: {
+        method: "count",
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      Find: {
+        method: "find",
+        fn: function(name, definition, key, value, index) {
+          return [key];
+        }
+      },
+      FindBy: {
+        method: "findBy",
+        fn: function(name, definition, key, value, index) {
+          return [index.name, index.value];
+        }
+      },
+      Each: {
+        method: "each",
+        implemented: false,
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      EachBy: {
+        method: "eachBy",
+        implemented: false,
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      EachWhere: {
+        method: "eachWhere",
+        implemented: false,
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      FindWhere: {
+        method: "findWhere",
+        implemented: false,
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      },
+      Query: {
+        method: "query",
+        implemented: false,
+        fn: function(name, definition, key, value, index) {
+          return [];
+        }
+      }
+    };
+    getArguments = function(action, name, definition, key, value, index) {
+      var i, keyPath, _l, _len3, _ref1;
+      if (key instanceof Object) {
+        value = key;
+        key = null;
+      }
+      keyPath = definition.keyPath;
+      if (index) {
+        _ref1 = definition.indexes;
+        for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+          i = _ref1[_l];
+          i.$$index = true;
+          if (i === index) {
+            keyPath = i.path;
+            index = i;
+            break;
+          }
+          if (i.name === index) {
+            keyPath = i.path;
+            index = i;
+            break;
+          }
+          if (i.path === index) {
+            keyPath = i.path;
+            index = i;
+            break;
+          }
+        }
+        if (index.$$index) {
+          index = _.cloneDeep(index);
+        }
+      }
+      if (!key && value instanceof Object) {
+        if (value[definition.keyPath]) {
+          key = value[definition.keyPath];
+        }
+      }
+      if (!value) {
+        value = {};
+      }
+      if (index && index.$$index) {
+        if (value instanceof Object) {
+          index.value = value[index.path];
+        } else if (!value) {
+          index.value = key;
+        } else {
+          index.value = value;
+        }
+      }
+      if (!key) {
+        key = rfc4122.v4();
+      }
+      if (value instanceof Object) {
+        value[definition.keyPath] = key;
+      }
+      if (action.fn instanceof Function) {
+        return action.fn(name, definition, key, value, index);
+      }
+    };
+    execute = function(action, name, key, value, index) {
+      var actionKey, actualAction, args, deferred;
+      if (!action) {
+        return $q.reject("No action defined");
+      }
+      actualAction = null;
+      for (actionKey in actions) {
+        if (!actions.hasOwnProperty(actionKey)) {
+          continue;
+        }
+        if (action === actionKey) {
+          actualAction = actions[actionKey];
+          actualAction.key = actionKey;
+          break;
+        }
+        if (action === actions[actionKey]) {
+          actualAction = actions[actionKey];
+          actualAction.key = actionKey;
+          break;
+        }
+      }
+      if (!actualAction) {
+        return $q.reject("No action " + (JSON.stringify(action)));
+      }
+      action = actualAction;
+      if (action.implemented === false) {
+        return $q.reject("The action " + action.key + " is not yet implemented");
+      }
+      if (!name) {
+        return $q.reject("Object store required");
+      }
+      definition = parsed[name];
+      if (!definition) {
+        return $q.reject("Object store '" + name + "' doesn't exist");
+      }
+      args = getArguments(action, name, definition, key, value, index);
+      deferred = $q.defer();
+      $indexedDB.openStore(name, function(store) {
+        return store[action.method].apply(store, args).then(deferred.resolve, deferred.reject);
+      });
+      return deferred.promise;
+    };
+    DataDefinition = (function() {
+      DataDefinition.prototype.$definition = null;
+
+      DataDefinition.prototype.$key = null;
+
+      function DataDefinition(key, definition) {
+        var def, functionKey, resultFunction, _fn;
+        this.$key = key;
+        this.$definition = definition;
+        def = this;
+        resultFunction = function() {
+          return def.get.apply(def, arguments);
+        };
+        _fn = function(r, f, d) {
+          return r[f] = function() {
+            return d[f].apply(d, arguments);
+          };
+        };
+        for (functionKey in DataDefinition.prototype) {
+          if (!DataDefinition.prototype.hasOwnProperty(functionKey)) {
+            continue;
+          }
+          if (!(this[functionKey] instanceof Function)) {
+            continue;
+          }
+          if (functionKey === "constructor") {
+            continue;
+          }
+          if (functionKey === "get") {
+            continue;
+          }
+          _fn(resultFunction, functionKey, this);
+        }
+        return resultFunction;
+      }
+
+      DataDefinition.prototype.get = function(keyOrValue) {
+        return factory.get(this.$key, keyOrValue);
+      };
+
+      DataDefinition.prototype.index = function(name, value) {
+        return factory.getBy(this.$key, name, value);
+      };
+
+      DataDefinition.prototype.put = function(value) {
+        return factory.put(this.$key, value);
+      };
+
+      DataDefinition.prototype.remove = function(keyOrValue) {
+        return factory.count(this.$key, keyOrValue);
+      };
+
+      DataDefinition.prototype.count = function() {
+        return factory.count(this.$key);
+      };
+
+      DataDefinition.prototype.getAll = function() {
+        return factory.getAll(this.$key);
+      };
+
+      DataDefinition.prototype.getAllKeys = function() {
+        return factory.getAllKeys(this.$key);
+      };
+
+      DataDefinition.prototype.clear = function() {
+        return factory.clear(this.$key);
+      };
+
+      return DataDefinition;
+
+    })();
+    generateMap = function() {
+      var map;
+      map = {};
+      for (key in parsed) {
+        if (!parsed.hasOwnProperty(key)) {
+          continue;
+        }
+        map[key] = new DataDefinition(key, parsed[key]);
+      }
+      return map;
+    };
+    factory = {
+      map: generateMap(),
+      getBy: function(name, index, key) {
+        return execute(actions.FindBy, name, key, null, index);
+      },
+      get: function(name, keyOrValue) {
+        return execute(actions.Find, name, keyOrValue);
+      },
+      put: function(name, key, value) {
+        return execute(actions.Upsert, name, key, value);
+      },
+      remove: function(name, keyOrValue) {
+        return execute(actions.Delete, name, keyOrValue);
+      },
+      count: function(name) {
+        return execute(actions.Count, name);
+      },
+      getAll: function(name) {
+        return execute(actions.GetAll, name);
+      },
+      getAllKeys: function(name) {
+        return execute(actions.GetAllKeys, name);
+      },
+      clear: function(name) {
+        return execute(actions.Clear, name);
+      }
+    };
+    return factory;
+  };
+
+  window.app.config([
+    "$indexedDBProvider", function($indexedDBProvider) {
+      var connection, upgrade, version, _l, _len3, _results;
+      connection = $indexedDBProvider.connection('ngShipper.Database');
+      upgrade = function(version, keys) {
+        connection.upgradeDatabase(version, function(event, db, tx) {
+          var store, _l, _len3, _results;
+          _results = [];
+          for (_l = 0, _len3 = keys.length; _l < _len3; _l++) {
+            key = keys[_l];
+            store = db.createObjectStore(key.name, {
+              keyPath: key.keyPath
+            });
+            _results.push((function() {
+              var _results1;
+              _results1 = [];
+              for (index in key.indexes) {
+                _results1.push(store.createIndex(index.name, index.path, {
+                  unique: index.unique
+                }));
+              }
+              return _results1;
+            })());
+          }
+          return _results;
+        });
+        return this;
+      };
+      version = 1;
+      _results = [];
+      for (_l = 0, _len3 = definitions.length; _l < _len3; _l++) {
+        keys = definitions[_l];
+        upgrade(version, keys);
+        _results.push(version += 1);
+      }
+      return _results;
+    }
+  ]).factory("$data", ['$q', '$indexedDB', 'rfc4122', $dataFactory]);
+
+}).call(this);
+
+(function() {
   window.app.controller('HeaderCtrl', [
-    '$scope', '$timeout', function($scope, $timeout) {
+    '$scope', '$timeout', '$location', function($scope, $timeout, $location) {
       $scope.search = false;
+      $scope.enableMenu = true;
       $scope.enableSearch = false;
       $scope.$on('enable-search', function() {
         return $scope.enableSearch = true;
       });
-      $scope.$on('$routeChangeStart', function() {
+      $scope.$on('$routeChangeStart', function(next) {
         return $scope.enableSearch = false;
+      });
+      $scope.$on('$routeChangeSuccess', function(next) {
+        if ($location.path() === 'home' || $location.path() === '/home') {
+          return $scope.enableMenu = false;
+        } else {
+          return $scope.enableMenu = true;
+        }
       });
       $scope.exitSearch = function() {
         $scope.search = false;
-        $scope.term = '';
-        return console.log('exit search');
+        return $scope.term = '';
       };
       $scope.titleClick = function() {
         if ($scope.search) {
@@ -1582,12 +2609,24 @@
         }
       };
       $scope.menuClick = function() {
+        var body;
         if ($scope.search) {
           $scope.exitSearch();
+          return;
         }
+        $scope.showMenu = !$scope.showMenu;
+        body = angular.element('body');
+        body[$scope.showMenu ? 'addClass' : 'removeClass']('menu-visible');
+      };
+      $scope.hideMenu = function() {
+        var body;
+        $scope.showMenu = false;
+        body = angular.element('body');
+        body.removeClass('menu-visible');
       };
       $scope.searchClick = function() {
-        return $scope.search = true;
+        $scope.search = true;
+        return $scope.hideMenu();
       };
       $scope.term = '';
       $scope.searchLoading = false;
@@ -1612,7 +2651,7 @@
           return $scope.searchLoading = false;
         }, Math.floor(Math.random() * 1500));
       };
-      return angular.element('#search-content').on('click', function(event) {
+      angular.element('#search-content').on('click', function(event) {
         var element;
         element = angular.element(event.target);
         if (!element) {
@@ -1623,6 +2662,10 @@
         }
         return $scope.$apply();
       });
+      return $scope.goto = function(route) {
+        $scope.showMenu = false;
+        return $location.path(route);
+      };
     }
   ]);
 
@@ -2352,7 +3395,7 @@
   ]).controller('ItemsCtrl', [
     '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
       $scope.sideMenu = {
-        icon: 'images/icons/ic_add_24px.svg',
+        iconClass: 'ic ic_add_24',
         tooltip: 'Add Item',
         click: function() {
           return $location.path('item');

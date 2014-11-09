@@ -1,5 +1,5 @@
 (function() {
-  window.app = angular.module('ngShipper', ['ngMaterial', 'ngRoute', 'angular-inview']).controller('AppCtrl', [
+  window.app = angular.module('ngShipper', ['ngMaterial', 'ngRoute', 'angular-inview', 'indexedDB', 'uuid']).controller('AppCtrl', [
     '$scope', function($scope) {
       $scope.$on('$routeChangeStart', function() {
         return $scope.hideNav = false;

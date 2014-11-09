@@ -12,7 +12,7 @@ window.app
   ])
 .controller( 'ItemsCtrl', ['$scope', '$location', '$rootScope', ($scope, $location, $rootScope) ->
   $scope.sideMenu = {
-    icon: 'images/icons/ic_add_24px.svg'
+    iconClass: 'ic ic_add_24'
     tooltip: 'Add Item'
     click: ->
       $location.path('item')

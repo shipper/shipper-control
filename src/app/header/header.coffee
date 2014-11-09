@@ -3,8 +3,10 @@
 # Proprietary and confidential
 # Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/ 11 / 14
 window.app
-.controller('HeaderCtrl', ['$scope', '$timeout', ($scope, $timeout)->
+.controller('HeaderCtrl', ['$scope', '$timeout', '$location', ($scope, $timeout, $location)->
   $scope.search = no
+
+  $scope.enableMenu = yes
 
   $scope.enableSearch = no
 
@@ -12,14 +14,19 @@ window.app
     $scope.enableSearch = yes
   )
 
-  $scope.$on('$routeChangeStart', ->
+  $scope.$on('$routeChangeStart', (next) ->
     $scope.enableSearch = no
-  );
 
+  )
+  $scope.$on('$routeChangeSuccess', (next) ->
+    if $location.path() is 'home' or $location.path() is '/home'
+      $scope.enableMenu = no
+    else
+      $scope.enableMenu = yes
+  )
   $scope.exitSearch = ->
     $scope.search = no
     $scope.term = ''
-    console.log('exit search')
 
   $scope.titleClick = ->
     if $scope.search
@@ -29,8 +36,20 @@ window.app
     if $scope.search
       $scope.exitSearch()
       return
+    $scope.showMenu = not $scope.showMenu
+    body = angular.element('body')
+    body[if $scope.showMenu then 'addClass' else 'removeClass']('menu-visible')
+    return
+  $scope.hideMenu = ->
+    $scope.showMenu = no
+    body = angular.element('body')
+    body.removeClass('menu-visible')
+    return
+
   $scope.searchClick = ->
     $scope.search = yes
+    $scope.hideMenu()
+
   $scope.term = ''
   $scope.searchLoading = no
 
@@ -61,4 +80,9 @@ window.app
       $scope.exitSearch()
     $scope.$apply()
   )
+
+  $scope.goto = (route) ->
+    $scope.showMenu = no
+    $location.path(route)
+
 ])

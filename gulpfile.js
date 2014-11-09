@@ -45,20 +45,43 @@ gulp.task('clone:bower:a', [ 'create:build' ], function(){
         path.join('bower_components', 'angular-material', 'angular-material.min.css'),
         path.join('bower_components', 'angular-route', 'angular-route.min.js'),
         path.join('bower_components', 'lodash', 'dist', 'lodash.underscore.min.js'),
+        path.join('bower_components', 'lodash', 'dist', 'lodash.min.js'),
         path.join('bower_components', 'jQuery', 'dist', 'jquery.min.js'),
         path.join('bower_components', 'ngInfiniteScroll', 'build', 'ng-infinite-scroll.min.js'),
         path.join('bower_components', 'angular-inview', 'angular-inview.js'),
+        path.join('bower_components', 'modernizr', 'modernizr.js'),
+        path.join('bower_components', 'require', 'build', 'require.js'),
+        path.join('bower_components', 'angular-indexed-db', 'angular-indexed-db.min.js'),
+        path.join('bower_components', 'angular-indexed-db', 'angular-indexed-db.js'),
+        path.join('bower_components', 'uuid', 'rng-browser.js'),
+        path.join('bower_components', 'uuid', 'rng.js'),
+        path.join('bower_components', 'uuid', 'uuid.js'),
+        path.join('bower_components', 'angular-uuid-service', 'uuid-svc.min.js'),
 
         path.join('bower_components', 'angular', 'angular.min.js.map'),
         path.join('bower_components', 'hammerjs', 'hammer.min.map'),
         path.join('bower_components', 'angular-animate', 'angular-animate.min.js.map'),
         path.join('bower_components', 'angular-aria', 'angular-aria.min.js.map'),
         path.join('bower_components', 'angular-route', 'angular-route.min.js.map'),
-        path.join('bower_components', 'jQuery', 'dist', 'jquery.min.map')
+        path.join('bower_components', 'jQuery', 'dist', 'jquery.min.map'),
+        path.join('bower_components', 'angular-indexed-db', 'angular-indexed-db.min.js.map')
     ]).pipe(gulp.dest(
         path.join(paths.dest, 'libs')
     ))
 });
+
+function cloneNodeModule(name){
+    return gulp.src(path.join("node_modules", name, "**", "*")).pipe(gulp.dest(
+        path.join(paths.dest, 'node_modules', name)
+    ));
+}
+
+gulp.task("clone:node_modules:routes", ["create:build"], function(){
+    return cloneNodeModule("routes")
+});
+
+gulp.task("clone:node_modules", ["clone:node_modules:routes"]);
+
 gulp.task('clone:bower:b', [ 'create:build' ], function(){
     return gulp.src(
         path.join('bower_components', 'angular-material', 'themes', '*.css')
@@ -83,7 +106,8 @@ gulp.task('clone:bower:c', [ 'create:build' ], function(){
             path.join(material, 'navigation', 'svg', 'ic_more_vert*'),
             path.join(material, 'action', '1x_web', 'ic_search*'),
             path.join(material, 'navigation', '1x_web', 'ic_menu*'),
-            path.join(material, 'navigation', '1x_web', 'ic_arrow*')
+            path.join(material, 'navigation', '1x_web', 'ic_arrow*'),
+            path.join(material, 'action', 'svg', 'ic_home*')
         ]
     ).pipe(gulp.dest(
         path.join(paths.dest, 'images', 'icons')
@@ -140,6 +164,7 @@ var develop = [
     'build:jade',
     "build:concat:js",
     "clone:bower:c",
+    "clone:node_modules"
     //'build:uglify',
     //'build:uglify:bower'
 ];

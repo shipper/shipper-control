@@ -7,7 +7,7 @@
   md-toolbar#header-toolbar.md-whiteframe-z1
     .md-toolbar-tools(layout="horizontal" layout-align="center center" ng-class='search?"search-active":""')
       div.left(layout="horizontal" layout-align="start center")
-        .menu-icon(ng-click='menuClick()') &nbsp;
+        .menu-icon(ng-click='menuClick()' ng-class='showMenu?"menu-active":""' ng-visible='enableMenu || search') &nbsp;
         .title(ng-click='titleClick()') {{search?'Back':title||'Shipper'}}
       div.search(layout="horizontal" layout-align="start center" ng-show='enableSearch')
         .search-icon-wrapper
@@ -29,3 +29,56 @@
             .search-item-icon-wrapper
               .search-item-icon &nbsp;
             .search-item-content {{item}}
+  //
+  md-sidenav#menu.md-sidenav-left.md-whiteframe-z1(is-open='showMenu' component-id="left" layout="vertical")
+    md-content#menu-content(flex)
+      md-list
+        md-item
+          md-item-content(ng-click="goto('home')")
+            .md-tile-left
+              .ic.ic_home_24
+            .md-tile-content Home
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('send')")
+            .md-tile-left
+              .ic.ic_local_shipping_24
+            .md-tile-content Send
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('store')")
+            .md-tile-left
+              .ic.ic_store_mall_directory_24
+            .md-tile-content Store
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('items')")
+            .md-tile-left
+              .ic.ic_extension_24
+            .md-tile-content Items
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('reports')")
+            .md-tile-left
+              .ic.ic_trending_up_24
+            .md-tile-content Reports
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('clients')")
+            .md-tile-left
+              .ic.ic_account_child_24
+            .md-tile-content Clients
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('support')")
+            .md-tile-left
+              .ic.ic_forum_24
+            .md-tile-content Support
+          md-divider
+        md-item
+          md-item-content(ng-click="goto('settings')")
+            .md-tile-left
+              .ic.ic_settings_24
+            .md-tile-content Settings
+
+  //#content-overlay(ng-show='showMenu' ng-click='hideMenu()') &nbsp;

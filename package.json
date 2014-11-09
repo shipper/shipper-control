@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/joukou/shipper-control",
   "dependencies": {
-    "angularjs": "0.0.1"
+    "angularjs": "0.0.1",
+    "routes": "~1.2.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "gulp": "3.8.x",
