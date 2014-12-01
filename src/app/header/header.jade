@@ -10,10 +10,11 @@
         .menu-icon(ng-click='menuClick()' ng-class='showMenu?"menu-active":""' ng-visible='enableMenu || search') &nbsp;
         .title(ng-click='titleClick()') {{search?'Back':title||'Shipper'}}
       div.search(layout="horizontal" layout-align="start center" ng-show='enableSearch')
-        .search-icon-wrapper
-          .search-icon(ng-class='searchLoading?"loading":""') &nbsp;
-        input(placeholder='Search' ng-click='searchClick()' ng-model='term' ng-change='termChange()')
+        .search-icon-wrapper.search-item-icon-wrapper
+          .search-icon.search-item-icon(ng-class='searchLoading?"loading":""') &nbsp;
+        input.search-item-content(placeholder='Search' ng-click='searchClick()' ng-model='term' ng-change='termChange()')
       div.right
+        md-button#logout.md-primary(md-no-ink) Logout
   #search-content(ng-show='search')
     .cards
       .card-wrapper(ng-if='term && items && items.length')

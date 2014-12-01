@@ -9,9 +9,11 @@ window.app
       controller: 'HomeCtrl'
       templateUrl: 'app/home/home.html'
     )
+    ###
     .otherwise({
       redirectTo: 'home'
     })
+    ###
   ])
 .controller( 'HomeCtrl', ['$scope', '$location', '$rootScope', ($scope, $location, $rootScope) ->
   $scope.items = ->

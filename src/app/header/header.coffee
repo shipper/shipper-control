@@ -3,7 +3,7 @@
 # Proprietary and confidential
 # Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/ 11 / 14
 window.app
-.controller('HeaderCtrl', ['$scope', '$timeout', '$location', ($scope, $timeout, $location)->
+.controller('HeaderCtrl', ['$scope', '$timeout', '$location', 'AuthService', ($scope, $timeout, $location, AuthService)->
   $scope.search = no
 
   $scope.enableMenu = yes
@@ -11,7 +11,7 @@ window.app
   $scope.enableSearch = no
 
   $scope.$on('enable-search', ->
-    $scope.enableSearch = yes
+    $scope.enableSearch = AuthService.isAuthenticated()
   )
 
   $scope.$on('$routeChangeStart', (next) ->
@@ -22,7 +22,7 @@ window.app
     if $location.path() is 'home' or $location.path() is '/home'
       $scope.enableMenu = no
     else
-      $scope.enableMenu = yes
+      $scope.enableMenu = AuthService.isAuthenticated()
   )
   $scope.exitSearch = ->
     $scope.search = no

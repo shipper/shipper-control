@@ -1,4 +1,24 @@
-# Copyright (C) Fabian Cook - All Rights Reserved
-# Unauthorized copying of this file, via any medium is strictly prohibited
-# Proprietary and confidential
-# Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/ 11 / 14
+AuthService = ( $http, env, Session, $q ) ->
+  self =
+    $Session: Session
+    login: ( credentials ) ->
+      deferred = $q.defer()
+      $http.post("#{env.api}/agent/login", credentials)
+      .success((data) ->
+        Session.create(data.token, data.user)
+        deferred.resolve(data.user)
+      )
+      .error(deferred.reject)
+      return deferred.promise
+    isAuthenticated: ->
+      return !!Session.token
+    isAuthorized: (roles) ->
+      if not _.isArray(roles)
+        roles = [ roles ]
+      return self.isAuthenticated() &&
+          roles.indexOf(Session.user.role)
+
+AuthService.$inject = [ '$http', 'env', 'Session', '$q' ]
+
+angular.module("ngShipper")
+.factory('AuthService', AuthService)

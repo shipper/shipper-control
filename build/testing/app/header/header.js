@@ -1,11 +1,11 @@
 (function() {
   window.app.controller('HeaderCtrl', [
-    '$scope', '$timeout', '$location', function($scope, $timeout, $location) {
+    '$scope', '$timeout', '$location', 'AuthService', function($scope, $timeout, $location, AuthService) {
       $scope.search = false;
       $scope.enableMenu = true;
       $scope.enableSearch = false;
       $scope.$on('enable-search', function() {
-        return $scope.enableSearch = true;
+        return $scope.enableSearch = AuthService.isAuthenticated();
       });
       $scope.$on('$routeChangeStart', function(next) {
         return $scope.enableSearch = false;
@@ -14,7 +14,7 @@
         if ($location.path() === 'home' || $location.path() === '/home') {
           return $scope.enableMenu = false;
         } else {
-          return $scope.enableMenu = true;
+          return $scope.enableMenu = AuthService.isAuthenticated();
         }
       });
       $scope.exitSearch = function() {

@@ -7,8 +7,17 @@ div(layout='vertical' layout-fill)
   div(layout='vertical' layout-align='center center' flex)
     md-content.md-whiteframe-z3(layout layout-padding)
       md-input-group
-        md-text-float.long(label='Username' ng-model='username')
-        md-text-float.long(label='Password' type='password' ng-model='password')
+        md-text-float.long(
+          label='Username'
+          ng-model='username'
+          ng-class="error?'md-warn':''"
+        )
+        md-text-float.long(
+          label='Password'
+          type='password'
+          ng-model='password'
+          ng-class="error?'md-warn':''"
+        )
         md-text-float.long(
           label='Repeat Password'
           type='passwordConfirm'

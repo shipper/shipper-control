@@ -1,8 +1,40 @@
 (function() {
+  var parseLocation;
+
+  parseLocation = function(location) {
+    var i, obj, pair, pairs, _i, _len;
+    pairs = location.substring(1).split("&");
+    obj = {};
+    pair = null;
+    i = null;
+    for (_i = 0, _len = pairs.length; _i < _len; _i++) {
+      i = pairs[_i];
+      if (i === "") {
+        continue;
+      }
+      pair = i.split("=");
+      obj[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
+    return obj;
+  };
+
+  window.QueryString = parseLocation(window.location.search);
+
   window.app = angular.module('ngShipper', ['ngMaterial', 'ngRoute', 'angular-inview', 'indexedDB', 'uuid']).controller('AppCtrl', [
-    '$scope', function($scope) {
-      $scope.$on('$routeChangeStart', function() {
-        return $scope.hideNav = false;
+    '$scope', '$location', 'AuthService', function($scope, $location, AuthService) {
+      $scope.isAuthorized = AuthService.isAuthorized;
+      $scope.isAuthenticated = AuthService.isAuthenticated;
+      $scope.$on('$routeChangeStart', function(event, route) {
+        var data;
+        $scope.hideNav = false;
+        data = route.$$route.data || {};
+        if (!$scope.isAuthenticated() && !data.anonymous) {
+          return $location.path("/login");
+        }
+      });
+      $scope.$on('$locationChangeSuccess', function() {
+        console.log($location.absUrl());
+        return console.log($location.search());
       });
       $scope.$on('hide-nav', function() {
         return $scope.hideNav = true;
@@ -2024,7 +2056,62 @@
 }).call(this);
 
 (function() {
+  var AuthService;
 
+  AuthService = function($http, env, Session, $q) {
+    var self;
+    return self = {
+      $Session: Session,
+      login: function(credentials) {
+        var deferred;
+        deferred = $q.defer();
+        $http.post("" + env.api + "/agent/login", credentials).success(function(data) {
+          Session.create(data.token, data.user);
+          return deferred.resolve(data.user);
+        }).error(deferred.reject);
+        return deferred.promise;
+      },
+      isAuthenticated: function() {
+        return !!Session.token;
+      },
+      isAuthorized: function(roles) {
+        if (!_.isArray(roles)) {
+          roles = [roles];
+        }
+        return self.isAuthenticated() && roles.indexOf(Session.user.role);
+      }
+    };
+  };
+
+  AuthService.$inject = ['$http', 'env', 'Session', '$q'];
+
+  angular.module("ngShipper").factory('AuthService', AuthService);
+
+}).call(this);
+
+(function() {
+  var Session;
+
+  Session = function() {
+    var lastToken;
+    lastToken = localStorage.getItem("token");
+    this.dirty = !!lastToken;
+    this.lastToken = lastToken;
+    this.create = function(token, user) {
+      localStorage.setItem("token", token);
+      this.dirty = false;
+      this.token = token;
+      return this.user = user;
+    };
+    this.destroy = function() {
+      localStorage.setItem("token", null);
+      this.token = null;
+      return this.user = null;
+    };
+    return this;
+  };
+
+  angular.module("ngShipper").service('Session', Session);
 
 }).call(this);
 
@@ -2138,6 +2225,13 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+  angular.module("ngShipper").constant("env", {
+    api: "http://localhost:2301"
+  });
 
 }).call(this);
 
@@ -2582,12 +2676,12 @@
 
 (function() {
   window.app.controller('HeaderCtrl', [
-    '$scope', '$timeout', '$location', function($scope, $timeout, $location) {
+    '$scope', '$timeout', '$location', 'AuthService', function($scope, $timeout, $location, AuthService) {
       $scope.search = false;
       $scope.enableMenu = true;
       $scope.enableSearch = false;
       $scope.$on('enable-search', function() {
-        return $scope.enableSearch = true;
+        return $scope.enableSearch = AuthService.isAuthenticated();
       });
       $scope.$on('$routeChangeStart', function(next) {
         return $scope.enableSearch = false;
@@ -2596,7 +2690,7 @@
         if ($location.path() === 'home' || $location.path() === '/home') {
           return $scope.enableMenu = false;
         } else {
-          return $scope.enableMenu = true;
+          return $scope.enableMenu = AuthService.isAuthenticated();
         }
       });
       $scope.exitSearch = function() {
@@ -2677,9 +2771,13 @@
       return $routeProvider.when('/home', {
         controller: 'HomeCtrl',
         templateUrl: 'app/home/home.html'
-      }).otherwise({
-        redirectTo: 'home'
       });
+
+      /*
+      .otherwise({
+        redirectTo: 'home'
+      })
+       */
     }
   ]).controller('HomeCtrl', [
     '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {
@@ -3464,24 +3562,50 @@
 }).call(this);
 
 (function() {
-  window.app.config([
+  var LoginCtrl;
+
+  LoginCtrl = function($scope, $location, AuthService, $mdDialog) {
+    var alert, dialog;
+    if (AuthService.isAuthenticated()) {
+      $location.path('/home');
+      return;
+    }
+    if (AuthService.$Session.dirty) {
+      alert = $mdDialog.alert().title("Attempting to restore previous session");
+      dialog = $mdDialog.show(alert);
+    }
+    $scope.username = '';
+    $scope.password = '';
+    $scope.error = false;
+    return $scope.signIn = function() {
+      $scope.error = false;
+      return AuthService.login({
+        username: $scope.username,
+        password: $scope.password
+      }).then(function() {
+        $scope.username = '';
+        $scope.password = '';
+        return $location.path("/home");
+      }).fail(function() {
+        $scope.password = '';
+        return $scope.error = true;
+      });
+    };
+  };
+
+  LoginCtrl.$inject = ['$scope', '$location', 'AuthService', '$mdDialog'];
+
+  angular.module("ngShipper").config([
     '$routeProvider', function($routeProvider) {
       return $routeProvider.when('/login', {
         controller: 'LoginCtrl',
-        templateUrl: 'app/login/login.html'
+        templateUrl: 'app/login/login.html',
+        data: {
+          anonymous: true
+        }
       });
     }
-  ]).controller('LoginCtrl', [
-    '$scope', '$location', function($scope, $location) {
-      $scope.username = '';
-      $scope.password = '';
-      return $scope.signIn = function() {
-        if ($scope.username === 'Fabian' && $scope.password === 'password') {
-          return $location.path('home');
-        }
-      };
-    }
-  ]);
+  ]).controller('LoginCtrl', LoginCtrl);
 
 }).call(this);
 
@@ -3557,5 +3681,10 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+
 
 }).call(this);

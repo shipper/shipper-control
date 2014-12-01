@@ -4,9 +4,13 @@
       return $routeProvider.when('/home', {
         controller: 'HomeCtrl',
         templateUrl: 'app/home/home.html'
-      }).otherwise({
-        redirectTo: 'home'
       });
+
+      /*
+      .otherwise({
+        redirectTo: 'home'
+      })
+       */
     }
   ]).controller('HomeCtrl', [
     '$scope', '$location', '$rootScope', function($scope, $location, $rootScope) {

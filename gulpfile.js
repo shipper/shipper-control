@@ -1,16 +1,14 @@
-var gulp    = require('gulp'),
-    coffee  = require("gulp-coffee"),
-    less    = require('gulp-less'),
-    jade    = require('gulp-jade'),
-    path    = require('path'),
-    mkdirp  = require('mkdirp'),
-    async   = require('async'),
-    rimraf  = require('gulp-rimraf'),
-    concat  = require('gulp-concat'),
-    uglify  = require('gulp-uglify'),
-    lr      = require( 'tiny-lr' );
-
-lrServer    = lr()
+var gulp     = require('gulp'),
+    coffee   = require("gulp-coffee"),
+    less     = require('gulp-less'),
+    jade     = require('gulp-jade'),
+    path     = require('path'),
+    mkdirp   = require('mkdirp'),
+    async    = require('async'),
+    rimraf   = require('gulp-rimraf'),
+    concat   = require('gulp-concat'),
+    uglify   = require('gulp-uglify'),
+    constant = require( 'gulp-ng-constant' );
 
 paths = {
     build: 'build',
@@ -57,6 +55,7 @@ gulp.task('clone:bower:a', [ 'create:build' ], function(){
         path.join('bower_components', 'uuid', 'rng.js'),
         path.join('bower_components', 'uuid', 'uuid.js'),
         path.join('bower_components', 'angular-uuid-service', 'uuid-svc.min.js'),
+        path.join('bower_components', 'restangular', 'dist', 'restangular.min.js'),
 
         path.join('bower_components', 'angular', 'angular.min.js.map'),
         path.join('bower_components', 'hammerjs', 'hammer.min.map'),
@@ -168,6 +167,24 @@ var develop = [
     //'build:uglify',
     //'build:uglify:bower'
 ];
+
+configureFile = function(name){
+
+};
+
+gulp.task("config:develop", function(){
+    return configureFile("development");
+});
+
+gulp.task("config:staging", function(){
+    return configureFile("staging");
+});
+
+gulp.task("config:production", function(){
+    return configureFile("production");
+});
+
+
 
 gulp.task('develop', develop, function(){
     gulp.watch(paths.src.coffee, develop);

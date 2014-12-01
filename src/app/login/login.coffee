@@ -1,20 +1,48 @@
-# Copyright (C) Fabian Cook - All Rights Reserved
-# Unauthorized copying of this file, via any medium is strictly prohibited
-# Proprietary and confidential
-# Written by Fabian Cook <fabian.cook@shipper.co.nz>, 4/ 11 / 14
-window.app
+LoginCtrl = ( $scope, $location, AuthService, $mdDialog ) ->
+
+  if AuthService.isAuthenticated()
+    $location.path('/home')
+    return
+
+  if AuthService.$Session.dirty
+    alert = $mdDialog.alert()
+      .title("Attempting to restore previous session")
+    dialog = $mdDialog.show(
+      alert
+    )
+
+  $scope.username = ''
+  $scope.password = ''
+  $scope.error = no
+  $scope.signIn = ->
+    $scope.error = no
+    AuthService.login(
+      username: $scope.username
+      password: $scope.password
+    )
+    .then( ->
+      $scope.username = ''
+      $scope.password = ''
+      $location.path("/home")
+    )
+    .fail( ->
+      $scope.password = ''
+      $scope.error = yes
+    )
+
+
+
+LoginCtrl.$inject = ['$scope', '$location', 'AuthService', '$mdDialog' ]
+angular.module("ngShipper")
 .config(['$routeProvider', ($routeProvider) ->
     $routeProvider
     .when('/login',
       controller: 'LoginCtrl'
       templateUrl: 'app/login/login.html'
+      data: {
+        anonymous: true
+      }
     )
   ])
-.controller( 'LoginCtrl', ['$scope', '$location', ($scope, $location) ->
-  $scope.username = ''
-  $scope.password = ''
-  $scope.signIn = ->
-    if $scope.username is 'Fabian' and $scope.password is 'password'
-      $location.path('home')
-])
+.controller( 'LoginCtrl', LoginCtrl)
 
